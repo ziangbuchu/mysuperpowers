@@ -1,0 +1,5 @@
+I have an idea for improving our segmentation model.
+
+Right now the baseline uses a UNet with Dice plus BCE loss. I want to try boundary-aware supervision because the model misses thin structures.
+
+Can you help me think through the experiment before we change code?

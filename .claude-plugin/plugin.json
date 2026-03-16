@@ -1,13 +1,13 @@
 {
   "name": "superpowers",
-  "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "5.0.2",
+  "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, analysis, and reproducibility",
+  "version": "6.0.0",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/ShunyangLiu/superpowers_DL",
+  "repository": "https://github.com/ShunyangLiu/superpowers_DL",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
+  "keywords": ["skills", "deep-learning", "research", "experiments", "debugging", "reproducibility"]
 }

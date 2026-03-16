@@ -1,0 +1,8 @@
+Here is the approved experiment design:
+
+- Hypothesis: boundary-aware supervision will improve boundary F1 on thin structures
+- Baseline: current UNet training recipe from configs/segmentation/base.yaml
+- Metric: boundary F1 on the validation split
+- Budget: 3 seeds on 1 GPU each
+
+Please turn this into a concrete experiment plan with code, sanity checks, and run steps.

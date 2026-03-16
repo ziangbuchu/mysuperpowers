@@ -1,0 +1,5 @@
+I finished three ablations and the results are confusing.
+
+One run improves top-1 by 0.7, one is flat, and one is worse. The better run also took longer and used a slightly different eval checkpoint selection rule.
+
+Help me interpret what these experiments actually show.

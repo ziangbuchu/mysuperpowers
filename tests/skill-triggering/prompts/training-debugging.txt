@@ -1,0 +1,5 @@
+My training run keeps going to NaN around step 400.
+
+The baseline config works, but after adding a new contrastive auxiliary loss the total loss explodes and then everything becomes inf.
+
+Can you figure out what is going wrong?

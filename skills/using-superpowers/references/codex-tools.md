@@ -1,25 +1,14 @@
 # Codex Tool Mapping
 
-Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
+Skills use Claude Code tool names. In Codex, map them like this:
 
 | Skill references | Codex equivalent |
 |-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent` |
-| Multiple `Task` calls (parallel) | Multiple `spawn_agent` calls |
-| Task returns result | `wait` |
-| Task completes automatically | `close_agent` to free slot |
-| `TodoWrite` (task tracking) | `update_plan` |
-| `Skill` tool (invoke a skill) | Skills load natively — just follow the instructions |
-| `Read`, `Write`, `Edit` (files) | Use your native file tools |
-| `Bash` (run commands) | Use your native shell tools |
+| `Skill` | Skills load natively in session startup rules |
+| `TodoWrite` | `update_plan` |
+| `Task` | Use subagents only if your Codex setup supports collab |
+| `Read`, `Write`, `Edit` | Native file tools |
+| `Bash` | Native shell tool |
+| `WebSearch`, `WebFetch` | Native web tools |
 
-## Subagent dispatch requires collab
-
-Add to your Codex config (`~/.codex/config.toml`):
-
-```toml
-[features]
-collab = true
-```
-
-This enables `spawn_agent`, `wait`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
+Use subagents for independent experiment support work only when the platform can isolate context cleanly.

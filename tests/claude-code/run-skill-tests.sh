@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-# Test runner for Claude Code skills
-# Tests skills by invoking Claude Code CLI and verifying behavior
+# Test runner for Claude Code research skills
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "========================================"
-echo " Claude Code Skills Test Suite"
+echo " Claude Code Research Skill Test Suite"
 echo "========================================"
 echo ""
 echo "Repository: $(cd ../.. && pwd)"
@@ -26,7 +25,6 @@ fi
 VERBOSE=false
 SPECIFIC_TEST=""
 TIMEOUT=300  # Default 5 minute timeout per test
-RUN_INTEGRATION=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -42,10 +40,6 @@ while [[ $# -gt 0 ]]; do
             TIMEOUT="$2"
             shift 2
             ;;
-        --integration|-i)
-            RUN_INTEGRATION=true
-            shift
-            ;;
         --help|-h)
             echo "Usage: $0 [options]"
             echo ""
@@ -53,14 +47,11 @@ while [[ $# -gt 0 ]]; do
             echo "  --verbose, -v        Show verbose output"
             echo "  --test, -t NAME      Run only the specified test"
             echo "  --timeout SECONDS    Set timeout per test (default: 300)"
-            echo "  --integration, -i    Run integration tests (slow, 10-30 min)"
             echo "  --help, -h           Show this help"
             echo ""
             echo "Tests:"
-            echo "  test-subagent-driven-development.sh  Test skill loading and requirements"
-            echo ""
-            echo "Integration Tests (use --integration):"
-            echo "  test-subagent-driven-development-integration.sh  Full workflow execution"
+            echo "  test-experiment-design.sh     Test experiment-design skill guidance"
+            echo "  test-training-debugging.sh    Test training-debugging skill guidance"
             exit 0
             ;;
         *)
@@ -73,18 +64,9 @@ done
 
 # List of skill tests to run (fast unit tests)
 tests=(
-    "test-subagent-driven-development.sh"
+    "test-experiment-design.sh"
+    "test-training-debugging.sh"
 )
-
-# Integration tests (slow, full execution)
-integration_tests=(
-    "test-subagent-driven-development-integration.sh"
-)
-
-# Add integration tests if requested
-if [ "$RUN_INTEGRATION" = true ]; then
-    tests+=("${integration_tests[@]}")
-fi
 
 # Filter to specific test if requested
 if [ -n "$SPECIFIC_TEST" ]; then
@@ -171,12 +153,6 @@ echo "  Passed:  $passed"
 echo "  Failed:  $failed"
 echo "  Skipped: $skipped"
 echo ""
-
-if [ "$RUN_INTEGRATION" = false ] && [ ${#integration_tests[@]} -gt 0 ]; then
-    echo "Note: Integration tests were not run (they take 10-30 minutes)."
-    echo "Use --integration flag to run full workflow execution tests."
-    echo ""
-fi
 
 if [ $failed -gt 0 ]; then
     echo "STATUS: FAILED"

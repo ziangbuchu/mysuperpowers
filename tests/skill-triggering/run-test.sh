@@ -5,7 +5,7 @@
 # Tests whether Claude triggers a skill based on a natural prompt
 # (without explicitly mentioning the skill)
 
-set -e
+set -euo pipefail
 
 SKILL_NAME="$1"
 PROMPT_FILE="$2"
@@ -13,7 +13,7 @@ MAX_TURNS="${3:-3}"
 
 if [ -z "$SKILL_NAME" ] || [ -z "$PROMPT_FILE" ]; then
     echo "Usage: $0 <skill-name> <prompt-file> [max-turns]"
-    echo "Example: $0 systematic-debugging ./test-prompts/debugging.txt"
+    echo "Example: $0 training-debugging ./test-prompts/training-debugging.txt"
     exit 1
 fi
 
@@ -49,6 +49,7 @@ timeout 300 claude -p "$PROMPT" \
     --plugin-dir "$PLUGIN_DIR" \
     --dangerously-skip-permissions \
     --max-turns "$MAX_TURNS" \
+    --verbose \
     --output-format stream-json \
     > "$LOG_FILE" 2>&1 || true
 

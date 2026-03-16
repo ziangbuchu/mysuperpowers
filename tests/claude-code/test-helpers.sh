@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Helper functions for Claude Code skill tests
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
 # Run Claude Code with a prompt and capture output
 # Usage: run_claude "prompt text" [timeout_seconds] [allowed_tools]
 run_claude() {
@@ -8,24 +10,43 @@ run_claude() {
     local timeout="${2:-60}"
     local allowed_tools="${3:-}"
     local output_file=$(mktemp)
+    local attempts=0
+    local max_attempts=2
 
-    # Build command
-    local cmd="claude -p \"$prompt\""
+    local cmd=(
+        claude
+        -p "$prompt"
+        --plugin-dir "$REPO_ROOT"
+        --dangerously-skip-permissions
+    )
+
     if [ -n "$allowed_tools" ]; then
-        cmd="$cmd --allowed-tools=$allowed_tools"
+        cmd+=("--allowed-tools=$allowed_tools")
     fi
 
-    # Run Claude in headless mode with timeout
-    if timeout "$timeout" bash -c "$cmd" > "$output_file" 2>&1; then
-        cat "$output_file"
-        rm -f "$output_file"
-        return 0
-    else
+    while [ "$attempts" -lt "$max_attempts" ]; do
+        attempts=$((attempts + 1))
+
+        if timeout "$timeout" "${cmd[@]}" > "$output_file" 2>&1; then
+            cat "$output_file"
+            rm -f "$output_file"
+            return 0
+        fi
+
         local exit_code=$?
+        if grep -q "非Claude Code客户端请求\|non-Claude Code client request" "$output_file" && [ "$attempts" -lt "$max_attempts" ]; then
+            sleep 2
+            continue
+        fi
+
         cat "$output_file" >&2
         rm -f "$output_file"
         return $exit_code
-    fi
+    done
+
+    cat "$output_file" >&2
+    rm -f "$output_file"
+    return 1
 }
 
 # Check if output contains a pattern

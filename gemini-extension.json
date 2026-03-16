@@ -1,6 +1,6 @@
 {
   "name": "superpowers",
-  "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "5.0.0",
+  "description": "Deep learning research workflow skills: experiment design, execution, debugging, analysis, and reproducibility",
+  "version": "6.0.0",
   "contextFileName": "GEMINI.md"
 }

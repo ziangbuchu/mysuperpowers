@@ -1,0 +1,3 @@
+I found a paper that adds token pruning to vision transformers and reports a speedup with almost no accuracy loss.
+
+Can you help me figure out what the core intervention is, what assumptions the paper makes, and what the smallest faithful experiment in our codebase would be?

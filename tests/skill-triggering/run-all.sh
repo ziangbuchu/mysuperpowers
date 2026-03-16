@@ -2,18 +2,18 @@
 # Run all skill triggering tests
 # Usage: ./run-all.sh
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROMPTS_DIR="$SCRIPT_DIR/prompts"
 
 SKILLS=(
-    "systematic-debugging"
-    "test-driven-development"
-    "writing-plans"
-    "dispatching-parallel-agents"
-    "executing-plans"
-    "requesting-code-review"
+    "experiment-design"
+    "experiment-planning"
+    "training-debugging"
+    "result-analysis"
+    "reproducibility-check"
+    "paper-to-implementation"
 )
 
 echo "=== Running Skill Triggering Tests ==="
@@ -33,7 +33,7 @@ for skill in "${SKILLS[@]}"; do
 
     echo "Testing: $skill"
 
-    if "$SCRIPT_DIR/run-test.sh" "$skill" "$prompt_file" 3 2>&1 | tee /tmp/skill-test-$skill.log; then
+    if "$SCRIPT_DIR/run-test.sh" "$skill" "$prompt_file" 3 2>&1 | tee "/tmp/skill-test-$skill.log"; then
         PASSED=$((PASSED + 1))
         RESULTS+=("✅ $skill")
     else
