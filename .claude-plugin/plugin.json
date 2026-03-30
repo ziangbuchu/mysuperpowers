@@ -3,11 +3,10 @@
   "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, analysis, and reproducibility",
   "version": "6.0.0",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "ziangbuchu"
   },
-  "homepage": "https://github.com/ShunyangLiu/superpowers_DL",
-  "repository": "https://github.com/ShunyangLiu/superpowers_DL",
+  "homepage": "https://github.com/ziangbuchu/mysuperpowers",
+  "repository": "https://github.com/ziangbuchu/mysuperpowers",
   "license": "MIT",
   "keywords": ["skills", "deep-learning", "research", "experiments", "debugging", "reproducibility"]
 }

@@ -15,10 +15,9 @@ User instructions still win. Skills define how to work, not what the human wants
 
 ## Platform Adaptation
 
-Skills use Claude Code tool names. On other platforms, read:
+Skills use Claude Code tool names. In Codex, read:
 
 - `references/codex-tools.md`
-- `references/gemini-tools.md`
 
 ## Research Skill Order
 

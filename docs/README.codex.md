@@ -7,7 +7,7 @@ Guide for using the deep learning research fork of Superpowers with OpenAI Codex
 Tell Codex:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/ShunyangLiu/superpowers_DL/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/ziangbuchu/mysuperpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -22,7 +22,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/ShunyangLiu
 1. Clone the repo:
 
    ```bash
-   git clone https://github.com/ShunyangLiu/superpowers_DL.git ~/.codex/superpowers
+   git clone https://github.com/ziangbuchu/mysuperpowers.git ~/.codex/superpowers
    ```
 
 2. Create the skills symlink:

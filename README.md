@@ -4,7 +4,7 @@
 
 面向 Agentic Coding 工具的深度学习研究工作流。
 
-`superpowers_DL` 是基于原版 Superpowers 改造的一个研究导向分支。原版更适合通用软件工程场景，而这个 fork 更聚焦模型研究：先定义假设，再设计最小可证伪实验，执行时保留完整证据链，系统化排查训练故障，分析结果，最后才决定是否宣称改进成立。
+这个 fork 是基于原版 Superpowers 改造的一个研究导向分支。原版更适合通用软件工程场景，而这里更聚焦模型研究：先定义假设，再设计最小可证伪实验，执行时保留完整证据链，系统化排查训练故障，分析结果，最后才决定是否宣称改进成立。
 
 ## 为什么要做这个 Fork
 
@@ -16,7 +16,7 @@
 - 单次好运结果被当成稳定结论
 - 真到要分享结果时，配置、seed、commit 和产物又找不全
 
-`superpowers_DL` 的目标，就是把这些高频失控点变成明确的技能和约束。
+这个 fork 的目标，就是把这些高频失控点变成明确的技能和约束。
 
 ## 适合谁
 
@@ -72,7 +72,7 @@ flowchart TD
 8. `reproducibility-check`
    在宣称改进前，核对命令、配置、seed、commit、数据版本、产物和指标表。
 
-在支持的平台上，`using-superpowers` 会在会话开始时注入，尽早把研究任务路由到合适的流程里。
+在 Claude Code 和 Codex 这类支持的环境里，`using-superpowers` 会尽早介入，把研究任务路由到合适的流程里。
 
 ## 内置技能
 
@@ -111,30 +111,14 @@ flowchart TD
 告诉 Codex：
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/ShunyangLiu/superpowers_DL/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/ziangbuchu/mysuperpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
 手动安装说明：[docs/README.codex.md](docs/README.codex.md)
 
-### OpenCode
+### Claude Code
 
-告诉 OpenCode：
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/ShunyangLiu/superpowers_DL/refs/heads/main/.opencode/INSTALL.md
-```
-
-手动安装说明：[docs/README.opencode.md](docs/README.opencode.md)
-
-### Gemini CLI
-
-```bash
-gemini extensions install https://github.com/ShunyangLiu/superpowers_DL
-```
-
-### Claude Code / Cursor
-
-仓库里保留了 `.claude-plugin/` 和 `.cursor-plugin/` 的本地打包元数据，但这个 fork 目前没有在这里作为官方 marketplace 发布版本来说明。
+仓库里保留了 `.claude-plugin/` 和 `hooks/`，用于 Claude Code 的本地插件加载与测试。可参考 `tests/claude-code/` 里的 `--plugin-dir` 用法。
 
 ## 核心原则
 
@@ -151,8 +135,8 @@ gemini extensions install https://github.com/ShunyangLiu/superpowers_DL
 - `commands/`: 核心技能的轻量快捷入口
 - `hooks/`: 支持平台的会话启动钩子
 - `agents/`: 可复用的 reviewer agent
-- `docs/`: 平台安装文档和项目说明
-- `tests/`: skill 触发和平台 smoke test
+- `docs/`: Claude Code / Codex 安装文档和项目说明
+- `tests/`: skill 触发和 Claude Code smoke test
 
 ## 贡献
 

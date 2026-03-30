@@ -10,7 +10,7 @@ Enable superpowers skills in Codex via native skill discovery. Just clone and sy
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/ShunyangLiu/superpowers_DL.git ~/.codex/superpowers
+   git clone https://github.com/ziangbuchu/mysuperpowers.git ~/.codex/superpowers
    ```
 
 2. **Create the skills symlink:**
