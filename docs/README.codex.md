@@ -2,6 +2,8 @@
 
 Guide for using the deep learning research fork of Superpowers with OpenAI Codex.
 
+Chinese usage tutorial: [README.codex.zh-CN.md](README.codex.zh-CN.md)
+
 ## Quick Install
 
 Tell Codex:

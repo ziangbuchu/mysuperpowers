@@ -116,6 +116,8 @@ Fetch and follow instructions from https://raw.githubusercontent.com/ziangbuchu/
 
 手动安装说明：[docs/README.codex.md](docs/README.codex.md)
 
+中文使用教程：[docs/README.codex.zh-CN.md](docs/README.codex.zh-CN.md)
+
 ### Claude Code
 
 仓库里保留了 `.claude-plugin/` 和 `hooks/`，用于 Claude Code 的本地插件加载与测试。可参考 `tests/claude-code/` 里的 `--plugin-dir` 用法。
