@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+require_file() {
+    local path="$1"
+    if [ ! -f "$REPO_ROOT/$path" ]; then
+        echo "[FAIL] Missing file: $path"
+        exit 1
+    fi
+}
+
+require_contains() {
+    local path="$1"
+    local pattern="$2"
+    if ! grep -q "$pattern" "$REPO_ROOT/$path"; then
+        echo "[FAIL] $path does not contain: $pattern"
+        exit 1
+    fi
+}
+
+echo "=== Test: workflow contracts ==="
+
+require_file "skills/_shared/workflow-protocol.md"
+require_file "skills/_shared/stage-summary-template.md"
+require_file "skills/_shared/final-summary-template.md"
+require_file "skills/_shared/workflow-state-example.json"
+require_file "docs/experiments/specs/.gitkeep"
+require_file "docs/experiments/plans/.gitkeep"
+require_file "docs/experiments/results/.gitkeep"
+
+for skill in \
+    skills/using-superpowers/SKILL.md \
+    skills/experiment-design/SKILL.md \
+    skills/experiment-planning/SKILL.md \
+    skills/experiment-execution/SKILL.md \
+    skills/training-debugging/SKILL.md \
+    skills/result-analysis/SKILL.md \
+    skills/experiment-closeout/SKILL.md \
+    skills/reproducibility-check/SKILL.md \
+    skills/paper-to-implementation/SKILL.md
+do
+    require_contains "$skill" "workflow-protocol.md"
+done
+
+for skill in \
+    skills/experiment-design/SKILL.md \
+    skills/experiment-planning/SKILL.md \
+    skills/experiment-execution/SKILL.md \
+    skills/training-debugging/SKILL.md \
+    skills/result-analysis/SKILL.md \
+    skills/experiment-closeout/SKILL.md \
+    skills/reproducibility-check/SKILL.md \
+    skills/paper-to-implementation/SKILL.md
+do
+    require_contains "$skill" "continue current workflow"
+    require_contains "$skill" "workflow.json"
+done
+
+for command in \
+    commands/continue-workflow.md \
+    commands/workflow-status.md \
+    commands/workflow-summary.md \
+    commands/plan-experiment.md \
+    commands/debug-training.md \
+    commands/check-reproducibility.md \
+    commands/reproduce-paper.md
+do
+    require_file "$command"
+done
+
+require_contains "skills/using-superpowers/SKILL.md" "workflow status"
+require_contains "skills/using-superpowers/SKILL.md" "workflow summary"
+require_contains "hooks/session-start" "continue current workflow"
+
+echo "=== workflow contracts tests passed ==="

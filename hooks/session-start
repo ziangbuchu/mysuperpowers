@@ -3,23 +3,17 @@
 
 set -euo pipefail
 
-# Determine plugin root directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Check if legacy skills directory exists and build warning
 warning_message=""
 legacy_skills_dir="${HOME}/.config/superpowers/skills"
 if [ -d "$legacy_skills_dir" ]; then
     warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Superpowers now uses Claude Code's skills system. Custom skills in ~/.config/superpowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/superpowers/skills</important-reminder>"
 fi
 
-# Read using-superpowers content
 using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md" 2>&1 || echo "Error reading using-superpowers skill")
 
-# Escape string for JSON embedding using bash parameter substitution.
-# Each ${s//old/new} is a single C-level pass - orders of magnitude
-# faster than the character-by-character loop this replaces.
 escape_for_json() {
     local s="$1"
     s="${s//\\/\\\\}"
@@ -30,17 +24,103 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
-warning_escaped=$(escape_for_json "$warning_message")
-session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
+resolve_project_root() {
+    local candidate=""
+    local git_root=""
 
-# Output context injection as JSON.
-# Non-Claude platforms expect additional_context.
-# Claude Code hooks expect hookSpecificOutput.additionalContext.
-# Claude Code reads BOTH fields without deduplication, so we must only
-# emit the field consumed by the current platform to avoid double injection.
+    if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "${CLAUDE_PROJECT_DIR}" ]; then
+        candidate="${CLAUDE_PROJECT_DIR}"
+    elif [ -n "${PWD:-}" ] && [ -d "${PWD}" ]; then
+        candidate="${PWD}"
+    else
+        return 0
+    fi
+
+    if command -v git >/dev/null 2>&1; then
+        git_root=$(git -C "${candidate}" rev-parse --show-toplevel 2>/dev/null || true)
+        if [ -n "${git_root}" ]; then
+            candidate="${git_root}"
+        fi
+    fi
+
+    printf '%s' "${candidate}"
+}
+
+json_string_value() {
+    local key="$1"
+    local file="$2"
+    local line=""
+    local value=""
+
+    line=$(grep -m1 "\"${key}\"" "${file}" 2>/dev/null || true)
+    if [ -z "${line}" ]; then
+        return 0
+    fi
+
+    value=$(printf '%s' "${line}" | sed -E "s/.*\"${key}\"[[:space:]]*:[[:space:]]*\"([^\"]*)\".*/\\1/" 2>/dev/null || true)
+    printf '%s' "${value}"
+}
+
+build_workflow_guidance() {
+    local project_root=""
+    local state_root=""
+    local active_file=""
+    local workflow_id=""
+    local workflow_file=""
+    local current_stage=""
+    local next_stage=""
+    local status=""
+    local problem_summary=""
+
+    project_root=$(resolve_project_root)
+
+    if [ -z "${project_root}" ]; then
+        printf '\n\n<workflow-guide>No project root detected for workflow lookup.\nUseful prompts: `continue current workflow`, `workflow status`, `workflow summary`.\n</workflow-guide>'
+        return 0
+    fi
+
+    state_root="${project_root}/.superpowers/workflows"
+    active_file="${state_root}/ACTIVE"
+
+    if [ ! -f "${active_file}" ]; then
+        printf '\n\n<workflow-guide>No active workflow found in %s.\nUseful prompts: `help me choose the right superpowers skill`, `continue current workflow`, `workflow summary`.\n</workflow-guide>' "${project_root}"
+        return 0
+    fi
+
+    workflow_id=$(head -n 1 "${active_file}" | tr -d '\r\n')
+    if [ -z "${workflow_id}" ]; then
+        printf '\n\n<workflow-guide>An ACTIVE workflow marker exists in %s but it is empty.\nAsk the user to repair or recreate the workflow before continuing.\n</workflow-guide>' "${project_root}"
+        return 0
+    fi
+
+    workflow_file="${state_root}/${workflow_id}/workflow.json"
+    if [ ! -f "${workflow_file}" ]; then
+        printf '\n\n<workflow-guide>Active workflow detected in %s.\nworkflow_id: %s\nworkflow.json is missing, so the state needs repair before continuing.\n</workflow-guide>' "${project_root}" "${workflow_id}"
+        return 0
+    fi
+
+    current_stage=$(json_string_value "current_stage" "${workflow_file}")
+    next_stage=$(json_string_value "next_stage" "${workflow_file}")
+    status=$(json_string_value "status" "${workflow_file}")
+    problem_summary=$(json_string_value "problem_summary" "${workflow_file}")
+
+    [ -z "${current_stage}" ] && current_stage="unknown"
+    [ -z "${next_stage}" ] && next_stage="unknown"
+    [ -z "${status}" ] && status="unknown"
+    [ -z "${problem_summary}" ] && problem_summary="(not recorded)"
+
+    printf '\n\n<workflow-guide>Active workflow detected.\nproject_root: %s\nworkflow_id: %s\nstatus: %s\ncurrent_stage: %s\nnext_stage: %s\nproblem: %s\nWhen the user asks to continue, resume this workflow before starting a new one.\nUseful prompts: `continue current workflow`, `workflow status`, `workflow summary`.\n</workflow-guide>' \
+        "${project_root}" "${workflow_id}" "${status}" "${current_stage}" "${next_stage}" "${problem_summary}"
+}
+
+using_superpowers_escaped=$(escape_for_json "${using_superpowers_content}")
+warning_escaped=$(escape_for_json "${warning_message}")
+workflow_guidance=$(build_workflow_guidance)
+workflow_guidance_escaped=$(escape_for_json "${workflow_guidance}")
+
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${workflow_guidance_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
+
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
-  # Claude Code sets CLAUDE_PLUGIN_ROOT — emit only hookSpecificOutput
   cat <<EOF
 {
   "hookSpecificOutput": {
@@ -50,7 +130,6 @@ if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
 }
 EOF
 else
-  # Non-Claude platforms — emit only additional_context
   cat <<EOF
 {
   "additional_context": "${session_context}"

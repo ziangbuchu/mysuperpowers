@@ -7,6 +7,21 @@ description: Use before changing a model, loss, optimizer, dataset pipeline, aug
 
 Turn a rough research idea into a falsifiable experiment plan before writing code.
 
+## Workflow Integration
+
+Before stage-specific reasoning:
+
+1. Read `../_shared/workflow-protocol.md`.
+2. Resolve or create the active workflow in the current project root.
+3. Read `workflow.json`, prior stage summaries, and any existing spec linked from workflow state.
+4. Reuse saved context instead of asking the user to restate it.
+
+This stage writes:
+
+- `docs/experiments/specs/YYYY-MM-DD-<topic>.md`
+- `.superpowers/workflows/<workflow_id>/stages/experiment-design.md`
+- updated `workflow.json`
+
 ## Hard Gate
 
 Do not change code, configs, or launch runs until these are clear:
@@ -25,7 +40,16 @@ Do not change code, configs, or launch runs until these are clear:
 4. Propose 2-3 approaches and recommend one.
 5. Define the first experiment as the smallest test that could disprove the idea.
 6. Write an experiment card to `docs/experiments/specs/YYYY-MM-DD-<topic>.md`.
-7. Get user approval before moving to `experiment-planning`.
+7. Update `workflow.json` with `hypothesis`, `baseline`, `metric`, `dataset_split`, `budget`, `first_falsifier`, and `approval_required=true`.
+8. Write the stage summary using `../_shared/stage-summary-template.md`.
+9. Stop for explicit user approval before moving to `experiment-planning`.
+
+## Exit State
+
+- `current_stage=experiment-design`
+- `next_stage=experiment-planning`
+- `status=awaiting_approval`
+- include the exact continue phrase `continue current workflow`
 
 ## Experiment Card
 

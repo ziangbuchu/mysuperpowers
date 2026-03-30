@@ -1,0 +1,41 @@
+{
+  "id": "2026-03-30-boundary-aware-supervision",
+  "topic": "boundary-aware supervision on thin structures",
+  "project_root": "/abs/path/to/project",
+  "status": "active",
+  "entry_stage": "experiment-design",
+  "current_stage": "experiment-design",
+  "next_stage": "experiment-planning",
+  "problem_summary": "Test whether boundary-aware supervision improves boundary F1 on thin structures.",
+  "stage_status": {
+    "paper-to-implementation": "skipped",
+    "experiment-design": "done",
+    "experiment-planning": "not_started",
+    "experiment-execution": "not_started",
+    "training-debugging": "not_started",
+    "result-analysis": "not_started",
+    "experiment-closeout": "not_started",
+    "reproducibility-check": "not_started"
+  },
+  "docs": {
+    "spec": "docs/experiments/specs/2026-03-30-boundary-aware-supervision.md",
+    "plan": "",
+    "result": "",
+    "final_summary": ".superpowers/workflows/2026-03-30-boundary-aware-supervision/final-summary.md"
+  },
+  "decisions": {
+    "hypothesis": "If we add boundary-aware supervision, boundary F1 should improve because thin structures receive stronger local supervision.",
+    "baseline": "configs/segmentation/base.yaml",
+    "metric": "boundary F1 on the validation split",
+    "dataset_split": "current train/val split",
+    "budget": "3 seeds on 1 GPU each",
+    "first_falsifier": "single-seed short run with one sanity overfit check"
+  },
+  "open_questions": [],
+  "evidence": {},
+  "artifacts": {},
+  "pending": {
+    "approval_for": "experiment-design",
+    "question": "Approve the current design before moving to experiment-planning."
+  }
+}

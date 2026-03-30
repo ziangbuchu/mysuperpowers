@@ -7,6 +7,20 @@ description: Use when training diverges, produces NaNs, stalls, runs out of memo
 
 Treat model failures like research incidents: isolate, measure, and prove the root cause before changing multiple things.
 
+## Workflow Integration
+
+Before stage-specific debugging:
+
+1. Read `../_shared/workflow-protocol.md`.
+2. Resolve or create the active workflow in the current project root.
+3. Read `workflow.json`, prior run records, stage summaries, and any existing debug artifacts.
+4. Prefer saved run metadata over asking the user to restate commands, configs, or failure symptoms.
+
+This stage writes:
+
+- `.superpowers/workflows/<workflow_id>/stages/training-debugging.md`
+- updated `workflow.json`
+
 ## First Pass
 
 Reduce the problem:
@@ -37,7 +51,16 @@ Read `references/failure-patterns.md` when you need concrete probes.
 4. Change one variable at a time.
 5. Fix the root cause.
 6. Re-run the failing case and the baseline case.
-7. Use `reproducibility-check` before saying the issue is fixed.
+7. Update `workflow.json` with `failure_signature`, `minimal_repro`, `probe_points`, `root_cause`, `fix_or_next_probe`, and `verification_runs`.
+8. Write the stage summary using `../_shared/stage-summary-template.md`.
+9. Set `next_stage=experiment-execution` if more reruns are needed, otherwise `next_stage=reproducibility-check`.
+10. Use `reproducibility-check` before saying the issue is fixed.
+
+## Exit State
+
+- `current_stage=training-debugging`
+- `status=active` or `awaiting_input` when key evidence is missing
+- include the exact continue phrase `continue current workflow`
 
 ## Red Flags
 

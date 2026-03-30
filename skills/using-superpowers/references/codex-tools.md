@@ -12,3 +12,12 @@ Skills use Claude Code tool names. In Codex, map them like this:
 | `WebSearch`, `WebFetch` | Native web tools |
 
 Use subagents for independent experiment support work only when the platform can isolate context cleanly.
+
+## Workflow Notes
+
+- Superpowers workflow state lives in the current project under `.superpowers/workflows/`.
+- For continuation and summary flows, prefer natural-language prompts such as:
+  - `continue current workflow`
+  - `workflow status`
+  - `workflow summary`
+- Use native file and shell tools to inspect workflow state; do not rely on chat memory when the state files already exist.

@@ -1,6 +1,6 @@
 # Superpowers DL for Codex
 
-Guide for using the deep learning research fork of Superpowers with OpenAI Codex.
+Guide for using the workflow-oriented deep learning research fork of Superpowers with OpenAI Codex.
 
 Chinese usage tutorial: [README.codex.zh-CN.md](README.codex.zh-CN.md)
 
@@ -44,27 +44,73 @@ Codex scans `~/.agents/skills/` at startup. Superpowers exposes its skills throu
 ~/.agents/skills/superpowers/ -> ~/.codex/superpowers/skills/
 ```
 
-The `using-superpowers` skill handles skill-first behavior for research work in this fork.
+The `using-superpowers` skill now works as a workflow router. It can:
 
-## Usage
+- choose the earliest valid research stage
+- continue the active workflow in the current project
+- show workflow status
+- summarize the current workflow
 
-Typical prompts that should trigger a skill:
+Workflow state is stored in the active project under:
 
-- "I want to try rotary embeddings in this model"
-- "Training goes to NaN after warmup"
-- "Compare these ablations and tell me what to run next"
-- "Can you help me reproduce this paper fairly?"
+```text
+.superpowers/workflows/
+```
 
-You can also mention a skill directly, for example:
+Formal experiment docs are stored under:
 
-- `use experiment-design`
-- `use training-debugging`
+```text
+docs/experiments/specs/
+docs/experiments/plans/
+docs/experiments/results/
+```
+
+## Recommended Prompts
+
+### Start from the right stage
+
+```text
+Please choose the right superpowers skill for this problem and start from the earliest valid stage.
+```
+
+### Continue a previous workflow
+
+```text
+continue current workflow
+```
+
+### Inspect the current workflow
+
+```text
+workflow status
+workflow summary
+```
+
+### Jump directly to a stage
+
+```text
+use experiment-design
+use training-debugging
+use result-analysis
+```
+
+## What Changes Between Stages
+
+You should no longer need to paste the same context into every stage. The workflow protocol saves:
+
+- machine-readable workflow state in `workflow.json`
+- per-stage handoff summaries under `stages/`
+- final workflow summary in `final-summary.md`
+
+The protocol is defined in [../skills/_shared/workflow-protocol.md](../skills/_shared/workflow-protocol.md).
 
 ## Updating
 
 ```bash
 cd ~/.codex/superpowers && git pull
 ```
+
+Restart Codex after updating skills.
 
 ## Troubleshooting
 
@@ -73,3 +119,9 @@ cd ~/.codex/superpowers && git pull
 1. Verify the symlink: `ls -la ~/.agents/skills/superpowers`
 2. Check skills exist: `find ~/.codex/superpowers/skills -name SKILL.md`
 3. Restart Codex
+
+### Workflow does not continue
+
+1. Confirm the active project contains `.superpowers/workflows/ACTIVE`
+2. Confirm the matching `workflow.json` exists
+3. Ask `workflow status` before asking to continue

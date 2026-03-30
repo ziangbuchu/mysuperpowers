@@ -7,6 +7,22 @@ description: Use when an experiment run has finished and you need to decide whet
 
 Every experiment ends with a code-retention decision. Do not let failed or inconclusive changes silently leak into the next run.
 
+## Workflow Integration
+
+Before stage-specific closeout:
+
+1. Read `../_shared/workflow-protocol.md`.
+2. Resolve or create the active workflow in the current project root.
+3. Read `workflow.json`, result notes, prior stage summaries, and recorded start-state metadata.
+4. Reuse saved experiment metadata instead of asking the user to paste it again.
+
+This stage writes:
+
+- `docs/experiments/results/YYYY-MM-DD-<topic>.md`
+- `.superpowers/workflows/<workflow_id>/stages/experiment-closeout.md`
+- `.superpowers/workflows/<workflow_id>/final-summary.md`
+- updated `workflow.json`
+
 ## Start-State Requirement
 
 Before the first experiment-specific code change, record:
@@ -50,6 +66,16 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
    - whether code was kept or discarded
    - where the experiment note lives
    - what state the workspace is now in
+8. Update `workflow.json` with `retention_decision`, `workspace_state`, `result_note_path`, and `final_summary_seed`.
+9. Refresh `final-summary.md` using `../_shared/final-summary-template.md`.
+
+## Exit State
+
+- `current_stage=experiment-closeout`
+- `next_stage=reproducibility-check` only when the result is still claimable
+- otherwise `next_stage=none`
+- `status=closed` unless reproducibility work is still pending
+- include the exact continue phrase `continue current workflow`
 
 ## Guardrails
 

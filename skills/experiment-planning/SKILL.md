@@ -7,6 +7,21 @@ description: Use when an approved deep learning experiment design needs a concre
 
 Convert an approved experiment design into an execution plan that another researcher could follow without guessing.
 
+## Workflow Integration
+
+Before stage-specific planning:
+
+1. Read `../_shared/workflow-protocol.md`.
+2. Resolve or create the active workflow in the current project root.
+3. Read `workflow.json`, the current spec, prior stage summaries, and any referenced artifacts.
+4. If design approval is still pending, stop and surface that approval gate instead of planning.
+
+This stage writes:
+
+- `docs/experiments/plans/YYYY-MM-DD-<topic>.md`
+- `.superpowers/workflows/<workflow_id>/stages/experiment-planning.md`
+- updated `workflow.json`
+
 ## Output
 
 Save the plan to `docs/experiments/plans/YYYY-MM-DD-<topic>.md`.
@@ -41,7 +56,16 @@ Start every plan with:
 3. For each step, include exact file paths and exact commands.
 4. Define what artifacts must be saved: config, seed, commit, checkpoint, logs, metrics table.
 5. Call out rollback criteria and stop conditions.
-6. Hand execution to `experiment-execution`.
+6. Update `workflow.json` with `change_set`, `sanity_checks`, `run_matrix`, `artifact_requirements`, and `stop_conditions`.
+7. Write the stage summary using `../_shared/stage-summary-template.md`.
+8. Hand execution to `experiment-execution`.
+
+## Exit State
+
+- `current_stage=experiment-planning`
+- `next_stage=experiment-execution`
+- `status=active`
+- include the exact continue phrase `continue current workflow`
 
 ## Good Planning Rules
 

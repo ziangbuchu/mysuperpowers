@@ -1,7 +1,7 @@
 {
   "name": "superpowers",
   "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, analysis, and reproducibility",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "author": {
     "name": "ziangbuchu"
   },

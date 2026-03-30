@@ -1,110 +1,307 @@
 # Superpowers DL
 
-[English](README.md) | **简体中文**
+[English](docs/README.codex.md) | **简体中文**
 
-面向 Agentic Coding 工具的深度学习研究工作流。
+面向 Agentic Coding 工具的深度学习研究工作流技能集。
 
-这个 fork 是基于原版 Superpowers 改造的一个研究导向分支。原版更适合通用软件工程场景，而这里更聚焦模型研究：先定义假设，再设计最小可证伪实验，执行时保留完整证据链，系统化排查训练故障，分析结果，最后才决定是否宣称改进成立。
+这个 fork 的重点不是“多一个 skill”，而是把研究任务组织成可续接的 workflow：从任一阶段进入都可以，但阶段之间不再依赖人工复制上下文。
 
-## 为什么要做这个 Fork
+## 一句话
 
-很多深度学习迭代的问题，本质上不是“写代码慢”，而是流程失控：
+把它理解成一套“面向深度学习研究的 workflow skill system”：
 
-- 假设、baseline 和指标还没定清楚，就先开始改代码
-- 一轮实验里同时改了多个变量，最后很难解释结果
-- 训练故障靠经验拍脑袋修，而不是定位根因
-- 单次好运结果被当成稳定结论
-- 真到要分享结果时，配置、seed、commit 和产物又找不全
+- 不确定该先设计、先调试还是先分析时，它会帮你选阶段
+- 每个阶段结束后会自动保存交接物，而不是让你手工复制上下文
+- 新会话里可以直接继续上一个实验，而不是重新讲一遍背景
 
-这个 fork 的目标，就是把这些高频失控点变成明确的技能和约束。
+## 你会得到什么
 
-## 适合谁
+- 一个问题对应一个 workflow，而不是一串松散对话
+- skill 可单独使用，也可自动挂接到 workflow
+- 设计、规划、执行、调试、分析、收尾、复现检查之间有统一状态协议
+- 最后有统一 summary，可作为实验结论和下一步建议的出口
 
-如果你的工作主要是这些内容，这个 fork 会更合适：
+## 最快上手
 
-- 论文复现
-- 模型结构、loss、数据增强或训练策略改动
-- 训练问题排查和实验分诊
-- baseline 与 ablation 对比
-- 对外分享结果前的复现核查
+如果你刚装好，只要先记住这 3 句：
 
-如果你主要需要的是通用产品研发工作流，更适合直接使用上游 Superpowers。
+```text
+请为这个问题选择合适的 superpowers skill，并从最早的有效阶段开始。
+continue current workflow
+workflow summary
+```
 
-## 相比上游改了什么
+## 现在解决什么问题
 
-- 去掉了偏软件工程的工作流技能
-- 仓库围绕深度学习实验设计、执行、调试、结果解释和复现检查重建
-- 安装说明全部指向这个 fork，而不是上游 `obra/superpowers`
+很多深度学习迭代的问题，不是代码改不动，而是阶段之间断裂：
 
-## 研究工作流
+- 设计阶段说过的假设、baseline、指标，到了 planning/execution 还要再贴一遍
+- 调试、分析、收尾阶段经常拿不到前面的运行信息
+- 新会话里很难自然续上前一个实验
+- 最终总结和对外宣称没有统一出口
 
-这个 fork 围绕一套可重复的研究闭环组织：
+这个版本把这些问题收敛成一套 project-local workflow 协议。
+
+## 核心变化
+
+- skill 可以单独使用，也可以自动挂接到 workflow
+- workflow 状态默认保存在当前项目的 `.superpowers/workflows/`
+- 每个阶段结束都会写阶段摘要，并给出下一阶段和继续口令
+- Claude 的 `commands/` 与 `SessionStart` hook 现在都支持 workflow-aware 入口
+- Codex 侧统一支持自然语言入口：
+  - `请为这个问题选择合适的 superpowers skill`
+  - `continue current workflow`
+  - `workflow status`
+  - `workflow summary`
+
+## Canonical Workflow
 
 ```mermaid
 flowchart TD
-  A[论文想法或模型改动] --> B[paper-to-implementation]
-  B --> C[experiment-design]
+  A[Paper Idea / Model Change / Training Failure] --> B[paper-to-implementation]
+  A --> C[experiment-design]
   C --> D[experiment-planning]
   D --> E[experiment-execution]
-  E --> F{训练或运行出问题?}
-  F -- 是 --> G[training-debugging]
+  E --> F{training failure?}
+  F -- yes --> G[training-debugging]
   G --> E
-  F -- 否 --> H[result-analysis]
+  F -- no --> H[result-analysis]
   H --> I[experiment-closeout]
-  I --> J[reproducibility-check]
-  J --> K[对外汇报或进入下一轮实验]
+  I --> J{claimable result?}
+  J -- yes --> K[reproducibility-check]
+  J -- no --> L[workflow summary]
+  K --> L
 ```
 
-1. `paper-to-implementation`
-   把论文思路翻译成最小、忠实、可本地验证的实验。
-2. `experiment-design`
-   在动代码前锁定假设、baseline、指标、数据假设和算力预算。
-3. `experiment-planning`
-   把设计落成明确的代码改动、sanity check、运行步骤和产物保存要求。
-4. `experiment-execution`
-   按计划执行，控制变量，保留过程证据。
-5. `training-debugging`
-   系统化处理 NaN、发散、OOM、指标异常等训练问题。
-6. `result-analysis`
-   对 baseline、ablation 和 rerun 做保守分析，判断证据真正支持什么。
-7. `experiment-closeout`
-   每轮实验后明确决定代码保留还是回滚。
-8. `reproducibility-check`
-   在宣称改进前，核对命令、配置、seed、commit、数据版本、产物和指标表。
+允许从任一阶段进入，但一旦 workflow 建立，后续阶段默认复用同一套状态和工件。
 
-在 Claude Code 和 Codex 这类支持的环境里，`using-superpowers` 会尽早介入，把研究任务路由到合适的流程里。
+## Workflow State
 
-## 内置技能
+workflow 状态写在“当前研究项目”里，而不是写在 superpowers skills 仓库里。
 
-| 技能 | 作用 |
-| --- | --- |
-| `paper-to-implementation` | 拆出论文的核心改动与隐藏前提，并映射到本地代码。 |
-| `experiment-design` | 把模糊想法整理成可证伪的实验卡片。 |
-| `experiment-planning` | 输出包含文件、命令、检查项和产物要求的执行计划。 |
-| `experiment-execution` | 先实现并运行最小、最关键的验证实验。 |
-| `training-debugging` | 定位并证明训练故障的根因。 |
-| `result-analysis` | 保守比较 baseline、ablation 和 rerun，决定下一步。 |
-| `experiment-closeout` | 判断实验代码应该保留还是回滚。 |
-| `reproducibility-check` | 用证据链约束性能宣称。 |
-| `using-superpowers` | 在会话开始时强制进入 skill-first 工作方式。 |
+固定路径：
+
+- `.superpowers/workflows/ACTIVE`
+- `.superpowers/workflows/<workflow_id>/workflow.json`
+- `.superpowers/workflows/<workflow_id>/stages/<stage>.md`
+- `.superpowers/workflows/<workflow_id>/final-summary.md`
+
+正式的人类可读实验文档仍然写在：
+
+- `docs/experiments/specs/`
+- `docs/experiments/plans/`
+- `docs/experiments/results/`
+
+这套状态协议定义在 [skills/_shared/workflow-protocol.md](/data/lf/code/mysuperpowers/skills/_shared/workflow-protocol.md)。
 
 ## 快速开始
 
-先把这个 fork 安装到你的 agent 环境里，然后直接用自然语言描述研究任务。
+安装后，不需要记住很多 skill 名。优先记住这几条入口：
 
-示例 prompt：
+### 1. 不确定从哪开始
 
-- "I want to try rotary embeddings in this model."
-- "Training goes to NaN after warmup."
-- "Compare these ablations and tell me what to run next."
-- "Help me reproduce this paper fairly."
-- "I changed the loss and validation improved once. What evidence do I still need?"
+```text
+请为这个问题选择合适的 superpowers skill，并从最早的有效阶段开始。
+```
 
-你也可以显式指定技能，比如 `use experiment-design` 或 `use training-debugging`。
+### 2. 明确从某个阶段开始
+
+```text
+use experiment-design
+```
+
+或：
+
+```text
+use training-debugging
+```
+
+### 3. 继续上一个 workflow
+
+```text
+continue current workflow
+```
+
+### 4. 查看状态或总结
+
+```text
+workflow status
+workflow summary
+```
+
+## Claude Commands
+
+Claude Code 下提供这些快捷入口：
+
+- `design-experiment`
+- `plan-experiment`
+- `run-experiment`
+- `debug-training`
+- `analyze-results`
+- `close-experiment`
+- `check-reproducibility`
+- `reproduce-paper`
+- `continue-workflow`
+- `workflow-status`
+- `workflow-summary`
+
+这些 command 现在都会先解析或创建 workflow，再进入目标 skill。
+
+## 典型使用方式
+
+### 新想法，还没开始改代码
+
+```text
+请为这个问题选择合适的 superpowers skill，并从最早的有效阶段开始。
+
+任务：
+我想尝试 boundary-aware supervision 来改善细结构分割。
+```
+
+### 新会话里继续之前的实验
+
+```text
+continue current workflow
+```
+
+### 跑完了，但只想看现在的结论
+
+```text
+workflow summary
+```
+
+### 准备发到组里前再过一遍证据
+
+```text
+use reproducibility-check
+```
+
+## 完整例子
+
+下面用一个完整例子说明 workflow 是怎么走的。
+
+场景：你想给现有分割模型加 `boundary-aware supervision`，看看能不能提升细结构的边界 F1。
+
+1. 在新会话里先说：
+
+   ```text
+   请为这个问题选择合适的 superpowers skill，并从最早的有效阶段开始。
+
+   任务：
+   我想尝试 boundary-aware supervision 来改善细结构分割。
+   当前 baseline 是 UNet + Dice/BCE。
+   ```
+
+2. 系统会先进入 `experiment-design`，而不是直接改代码。它会先明确：
+   - hypothesis
+   - baseline
+   - metric
+   - dataset split
+   - compute budget
+   - first falsifier
+
+   这一阶段会写入：
+   - `docs/experiments/specs/2026-xx-xx-<topic>.md`
+   - `.superpowers/workflows/ACTIVE`
+   - `.superpowers/workflows/<workflow_id>/workflow.json`
+   - `.superpowers/workflows/<workflow_id>/stages/experiment-design.md`
+
+3. 你认可设计后，不需要把 design 内容再复制给 planning，只要说：
+
+   ```text
+   continue current workflow
+   ```
+
+4. 系统会进入 `experiment-planning`，把设计转成：
+   - 要改哪些文件
+   - 需要哪些 sanity check
+   - 运行命令怎么写
+   - 要保存哪些 artifact
+   - 什么情况下停止
+
+   并写入：
+   - `docs/experiments/plans/2026-xx-xx-<topic>.md`
+   - `.superpowers/workflows/<workflow_id>/stages/experiment-planning.md`
+
+5. 你再说一次：
+
+   ```text
+   continue current workflow
+   ```
+
+6. 系统会进入 `experiment-execution`，记录：
+   - start commit
+   - branch
+   - touched files
+   - sanity results
+   - run command / config / seed / output dir
+
+   这些信息会写回 `workflow.json`，所以后面调试和分析不需要你重新贴运行信息。
+
+7. 如果训练在 step 400 左右变成 NaN，你可以说：
+
+   ```text
+   use training-debugging
+   ```
+
+   它会进入 `training-debugging`，复用 execution 里记录的 run 信息，去做：
+   - 缩小到最小可复现配置
+   - 判断问题属于哪一类
+   - 加观测点
+   - 找正常 run 和异常 run 最早分叉的位置
+   - 一次只改一个变量
+
+   然后把根因和下一步写回 workflow。
+
+8. 调试完或实验跑完后，再说：
+
+   ```text
+   continue current workflow
+   ```
+
+   它会进入 `result-analysis`，保守比较 baseline、ablation、rerun，判断结果真正支持什么，并写入：
+   - `docs/experiments/results/2026-xx-xx-<topic>.md`
+   - `.superpowers/workflows/<workflow_id>/stages/result-analysis.md`
+
+9. 然后继续：
+
+   ```text
+   continue current workflow
+   ```
+
+   它会进入 `experiment-closeout`，明确问你：
+   - keep code changes
+   - discard code changes
+   - pause decision
+
+   并生成：
+   - `.superpowers/workflows/<workflow_id>/final-summary.md`
+
+10. 如果你准备对外说“这个改动确实更好”，最后再说：
+
+    ```text
+    use reproducibility-check
+    ```
+
+    它会检查：
+    - command
+    - config
+    - seed
+    - commit
+    - dataset split
+    - checkpoint / artifact
+    - metric table
+
+    证据足够才允许宣称改进成立。
+
+这个例子的关键点是：你不再需要手工传递 design、planning、execution、debugging、analysis 之间的上下文，因为这些内容都会沉淀到：
+
+- `.superpowers/workflows/ACTIVE`
+- `.superpowers/workflows/<workflow_id>/workflow.json`
+- `.superpowers/workflows/<workflow_id>/stages/*.md`
+- `.superpowers/workflows/<workflow_id>/final-summary.md`
 
 ## 安装
-
-请优先使用本仓库里的安装文档，而不是上游 marketplace 入口。
 
 ### Codex
 
@@ -114,39 +311,62 @@ flowchart TD
 Fetch and follow instructions from https://raw.githubusercontent.com/ziangbuchu/mysuperpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
-手动安装说明：[docs/README.codex.md](docs/README.codex.md)
-
-中文使用教程：[docs/README.codex.zh-CN.md](docs/README.codex.zh-CN.md)
+更多说明见 [docs/README.codex.md](/data/lf/code/mysuperpowers/docs/README.codex.md) 和 [docs/README.codex.zh-CN.md](/data/lf/code/mysuperpowers/docs/README.codex.zh-CN.md)。
 
 ### Claude Code
 
-仓库里保留了 `.claude-plugin/` 和 `hooks/`，用于 Claude Code 的本地插件加载与测试。可参考 `tests/claude-code/` 里的 `--plugin-dir` 用法。
+仓库保留了 `.claude-plugin/` 和 `hooks/`，可通过本地 plugin 方式加载。`SessionStart` hook 会在可行时注入 active workflow 的摘要和继续口令。
 
-## 核心原则
+## FAQ
 
-- 假设先于实现
-- 最小可证伪实验优先
-- baseline 必须公平
-- 失败实验也应在丢弃代码前完成归档
-- 证据优先于直觉
-- 可复现优先于讲故事
+### 到一个新项目里，使用 superpowers 会自动创建 `.superpowers/workflows/` 吗？
+
+不是“只要用了 superpowers 就立刻创建”，而是：
+
+- 普通问答、查看 skill 列表、问怎么用时，不应该创建
+- 第一次正式进入 workflow-aware 阶段时，应该在当前项目根目录创建
+
+典型会触发创建的输入：
+
+```text
+请为这个问题选择合适的 superpowers skill，并从最早的有效阶段开始。
+use experiment-design
+use training-debugging
+```
+
+预期会创建这些目录或文件：
+
+- `.superpowers/workflows/`
+- `.superpowers/workflows/ACTIVE`
+- `.superpowers/workflows/<workflow_id>/workflow.json`
+- `.superpowers/workflows/<workflow_id>/stages/`
+- `docs/experiments/specs/`
+- `docs/experiments/plans/`
+- `docs/experiments/results/`
+
+一句话说：开始一个真实 workflow 时自动创建，而不是一加载 skill 就创建。
 
 ## 仓库结构
 
-- `skills/`: 研究工作流技能
-- `commands/`: 核心技能的轻量快捷入口
-- `hooks/`: 支持平台的会话启动钩子
-- `agents/`: 可复用的 reviewer agent
-- `docs/`: Claude Code / Codex 安装文档和项目说明
-- `tests/`: skill 触发和 Claude Code smoke test
+- `skills/`: 研究阶段技能
+- `skills/_shared/`: workflow 协议、模板和状态示例
+- `commands/`: Claude Code 的 workflow-aware 快捷入口
+- `hooks/`: 会话启动增强
+- `docs/`: 安装、使用与测试说明
+- `docs/experiments/`: workflow 生成的人类可读实验文档目录
+- `tests/`: skill、hook 和 workflow 合同测试
 
-## 贡献
+## 测试
 
-新增或修改技能时，直接编辑 `skills/`。
+常用测试入口：
 
-- 每个 `SKILL.md` 保持简洁
-- 细节较多的内容放进 `references/`
-- 新增触发路径或改动路由行为时，同步更新测试
+```bash
+./tests/claude-code/run-skill-tests.sh
+./tests/hooks/test-session-start.sh
+./tests/workflow/test-workflow-contracts.sh
+```
+
+更多说明见 [docs/testing.md](/data/lf/code/mysuperpowers/docs/testing.md)。
 
 ## 许可证
 

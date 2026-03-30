@@ -7,6 +7,20 @@ description: Use when translating a paper idea into code, deciding whether a pap
 
 Separate what the paper actually contributes from what its codebase or benchmark setup happened to do.
 
+## Workflow Integration
+
+Before stage-specific analysis:
+
+1. Read `../_shared/workflow-protocol.md`.
+2. Resolve or create the active workflow in the current project root.
+3. Read `workflow.json`, prior stage summaries, and any existing paper notes.
+4. Reuse saved context instead of asking the user to restate the paper or local baseline.
+
+This stage writes:
+
+- `.superpowers/workflows/<workflow_id>/stages/paper-to-implementation.md`
+- updated `workflow.json`
+
 ## Workflow
 
 1. Extract the paper's core intervention:
@@ -27,7 +41,16 @@ Separate what the paper actually contributes from what its codebase or benchmark
    - reproduction
    - simplified local version
    - one-at-a-time ablations
-6. Hand off to `experiment-design`.
+6. Update `workflow.json` with `core_intervention`, `hidden_assumptions`, `local_mapping`, `minimal_reproduction`, and `ablation_ladder`.
+7. Write the stage summary using `../_shared/stage-summary-template.md`.
+8. Hand off to `experiment-design`.
+
+## Exit State
+
+- `current_stage=paper-to-implementation`
+- `next_stage=experiment-design`
+- `status=active`
+- include the exact continue phrase `continue current workflow`
 
 ## Guardrails
 
