@@ -50,6 +50,7 @@ The `using-superpowers` skill now works as a workflow router. It can:
 - continue the active workflow in the current project
 - show workflow status
 - summarize the current workflow
+- hand off a keep-ready workflow summary into branch selection and commit drafting
 
 Workflow state is stored in the active project under:
 
@@ -85,6 +86,8 @@ continue current workflow
 workflow status
 workflow summary
 ```
+
+When a workflow summary concludes that code should be kept and the workflow has enough Git metadata, the same flow may continue into branch choice, detailed commit drafting, and explicit commit confirmation.
 
 ### Jump directly to a stage
 
@@ -125,3 +128,4 @@ Restart Codex after updating skills.
 1. Confirm the active project contains `.superpowers/workflows/ACTIVE`
 2. Confirm the matching `workflow.json` exists
 3. Ask `workflow status` before asking to continue
+4. If `workflow summary` does not offer Git handoff, check whether the workflow is still awaiting input, approval, or missing execution start-state metadata

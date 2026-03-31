@@ -39,10 +39,12 @@ For those requests:
 
 1. Resolve the current project root.
 2. Inspect `.superpowers/workflows/ACTIVE`.
-3. If an active workflow exists, load `workflow.json`, relevant stage summaries, and any referenced docs.
-4. If the workflow is waiting on approval or missing evidence, surface that instead of advancing.
-5. If the workflow has a valid `next_stage`, continue with that stage.
-6. If no active workflow exists, say so plainly and ask for the problem to solve.
+3. If no active workflow exists, say so plainly and ask for the problem to solve.
+4. If an active workflow exists, load `workflow.json`, relevant stage summaries, and any referenced docs.
+5. If the user asked to continue and the workflow is waiting on approval or missing evidence, surface that instead of advancing.
+6. If the user asked to continue and the workflow has a valid `next_stage`, continue with that stage.
+7. If the user asked for `workflow status`, report the active state without advancing.
+8. If the user asked for `workflow summary`, produce the cumulative summary without advancing stages, and offer the protocol-defined Git handoff only when the workflow is Git-ready.
 
 ## Reuse Or Create
 
@@ -91,6 +93,7 @@ Stop and load the relevant skill if you catch yourself thinking:
 - Baseline and success metric before conclusions
 - Smallest falsifiable experiment first
 - Explicit keep-or-revert decision after each experiment
+- `workflow summary` stays a summary first, and only then offers Git handoff when the recorded state supports it
 - Evidence attached to every claim
 - Negative results recorded, not hidden
 - A workflow id and saved stage summary after every meaningful stage

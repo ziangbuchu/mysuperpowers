@@ -29,26 +29,34 @@ This stage writes:
    - start commit
    - branch name
    - whether the working tree is clean
+   - branch policy: `new_branch`, `main`, or `current_branch`
    - expected files/configs to touch
-3. Implement the smallest required code or config change.
-4. Run cheap verification before expensive runs:
+3. If the current branch is `main`, ask the user whether to:
+   - create a new experiment branch (recommended)
+   - stay on `main` only when the tree is clean
+   - if `main` is dirty, stop and isolate the experiment on a new branch before editing
+4. If the current branch is already not `main`, record `branch_policy=current_branch` unless the user explicitly requests a fresh branch.
+5. Implement the smallest required code or config change.
+6. Run cheap verification before expensive runs:
    - import/build checks
    - unit or shape checks
    - one batch forward/backward
    - short sanity training
-5. Launch the smallest experiment that can falsify the hypothesis.
-6. Record for every run:
+7. Launch the smallest experiment that can falsify the hypothesis.
+8. Record for every run:
    - command
    - config path or diff
    - seed
    - commit
    - dataset version or split
    - output directory
-7. Update `workflow.json` with `start_state`, `touched_files`, `sanity_results`, `runs`, and `observed_outcome`.
-8. Write the stage summary using `../_shared/stage-summary-template.md`.
-9. Escalate ambiguous or completed outcomes to `result-analysis`.
-10. After the experiment outcome is understood, use `experiment-closeout` to decide whether code stays or is reverted.
-11. Before claiming success, use `reproducibility-check`.
+9. Update `workflow.json` with `start_state`, `touched_files`, `sanity_results`, `runs`, and `observed_outcome`.
+   - `start_state` must include `commit`, `branch_name`, `tree_clean`, and `branch_policy`
+   - if Git handoff may be needed later, initialize `workflow.json.git.branch_strategy` and `workflow.json.git.commit_status`
+10. Write the stage summary using `../_shared/stage-summary-template.md`.
+11. Escalate ambiguous or completed outcomes to `result-analysis`.
+12. After the experiment outcome is understood, use `experiment-closeout` to decide whether code stays or is reverted.
+13. Before claiming success, use `reproducibility-check`.
 
 ## Exit State
 
@@ -60,6 +68,8 @@ This stage writes:
 ## Execution Rules
 
 - Never mix unrelated improvements into an experiment branch.
+- Never start experiment-specific writes on a dirty `main` branch.
+- Record the branch policy before touching tracked files so `workflow summary` can reuse it later.
 - If a sanity run fails, do not launch the full job.
 - If the first run is noisy or suspicious, rerun before interpreting.
 - If compute is limited, prioritize experiments that remove uncertainty fastest.

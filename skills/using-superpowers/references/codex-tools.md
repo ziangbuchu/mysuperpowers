@@ -20,4 +20,5 @@ Use subagents for independent experiment support work only when the platform can
   - `continue current workflow`
   - `workflow status`
   - `workflow summary`
+- When `workflow summary` finds a keep-ready workflow with enough Git metadata, it may continue into branch selection, commit drafting, and explicit commit confirmation in the same flow.
 - Use native file and shell tools to inspect workflow state; do not rely on chat memory when the state files already exist.

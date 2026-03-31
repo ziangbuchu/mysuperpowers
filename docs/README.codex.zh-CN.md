@@ -38,6 +38,8 @@ workflow status
 workflow summary
 ```
 
+如果当前 workflow 已经明确应保留代码，而且记录了足够的 Git 元数据，这个 summary 还会继续询问分支策略、生成详细 commit 草案，并在你确认后提交。
+
 ## 现在是怎么续接上下文的
 
 workflow 状态保存在当前项目下：
@@ -143,6 +145,7 @@ use reproducibility-check
 - 如果已经有 active workflow，优先说 `continue current workflow`。
 - 如果只想知道现在做到哪，优先说 `workflow status`。
 - 如果只想拿当前结论，优先说 `workflow summary`。
+- 如果 `workflow summary` 没有继续给 Git 选项，优先检查是不是还在等待 approval/input，或 execution 没有记录完整的 start-state。
 - 如果任务涉及模型、loss、数据、训练、评估、实验结论，默认应该先走 skill，而不是直接改代码。
 
 ## 更新

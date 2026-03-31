@@ -16,6 +16,7 @@ This repository keeps lightweight workflow-oriented tests around skill discovery
 ./tests/claude-code/run-skill-tests.sh
 ./tests/hooks/test-session-start.sh
 ./tests/workflow/test-workflow-contracts.sh
+./tests/workflow/test-workflow-summary-git-handoff.sh
 ```
 
 ## Codex Smoke Checks
@@ -31,3 +32,5 @@ workflow summary
 ```
 
 The assistant should prefer the active workflow instead of asking you to paste the previous stage again.
+
+If the workflow already supports keeping the code and has recorded Git start-state metadata, `workflow summary` should summarize first, then offer branch-aware Git handoff and a detailed commit draft.

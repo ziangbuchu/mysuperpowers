@@ -34,6 +34,13 @@
   "open_questions": [],
   "evidence": {},
   "artifacts": {},
+  "git": {
+    "branch_strategy": "unknown",
+    "target_branch": "",
+    "commit_status": "not_ready",
+    "commit_message": "",
+    "last_commit_hash": ""
+  },
   "pending": {
     "approval_for": "experiment-design",
     "question": "Approve the current design before moving to experiment-planning."

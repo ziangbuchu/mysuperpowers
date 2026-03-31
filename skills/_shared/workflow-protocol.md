@@ -58,6 +58,15 @@ Minimum required keys:
 - `artifacts`
 - `pending`
 
+Optional top-level keys:
+
+- `git`
+  - `branch_strategy`: `new_branch|main|current_branch|unknown`
+  - `target_branch`
+  - `commit_status`: `not_ready|awaiting_confirmation|drafted|committed|skipped`
+  - `commit_message`
+  - `last_commit_hash`
+
 Allowed `status` values:
 
 - `active`
@@ -118,8 +127,27 @@ When the user asks for workflow status:
 When the user asks for a workflow summary:
 
 - Read `workflow.json`, existing stage summaries, and any formal docs.
-- Produce a compact cumulative summary.
+- Produce a compact cumulative summary before any Git action.
 - If the workflow is closing or closed, refresh `final-summary.md`.
+- Determine `git_ready=true` only when all of these are true:
+  - the workflow is not waiting on approval or missing input
+  - the recorded outcome is keep-oriented, such as `retention_decision=keep`, a keep-oriented `decision`, or `claim_status=claimable`
+  - `start_state` includes `commit`, `branch_name`, `tree_clean`, and `branch_policy`
+  - the current workspace still has experiment-specific changes or staged changes that should be committed
+- If `git_ready=false`, surface the blocker and stop after the summary.
+- If `git_ready=true`, offer a Git handoff in the same flow:
+  - on a non-`main` branch: `continue current branch and commit` (recommended), `create a new branch and commit`, or `draft commit only`
+  - on a clean `main` branch: `create a new branch and commit` (recommended), `continue on main and commit`, or `draft commit only`
+  - on a dirty `main` branch: `create a new branch and commit` or `draft commit only`
+- For workflows that do not yet record `branch_policy`, ask again instead of assuming that `main` is safe.
+- Never create a commit without explicit user confirmation.
+- When the user chooses to commit from the summary flow:
+  - inspect the current git branch and working tree
+  - stage only the intended experiment changes
+  - draft a detailed Conventional Commit message
+  - use a Chinese subject summary and a body with these sections: `背景`, `变更`, `验证`, `证据`
+  - include the workflow id and artifact paths in the commit body
+  - write the latest draft and status back to `workflow.json.git`
 
 ## Canonical Stage Order
 
@@ -149,6 +177,7 @@ Each stage must write these stage-specific facts into `workflow.json`:
 - `experiment-design`: `hypothesis`, `baseline`, `metric`, `dataset_split`, `budget`, `first_falsifier`, `approval_required`
 - `experiment-planning`: `change_set`, `sanity_checks`, `run_matrix`, `artifact_requirements`, `stop_conditions`
 - `experiment-execution`: `start_state`, `touched_files`, `sanity_results`, `runs`, `observed_outcome`
+  - `start_state` must capture `commit`, `branch_name`, `tree_clean`, and `branch_policy` before experiment-specific edits
 - `training-debugging`: `failure_signature`, `minimal_repro`, `probe_points`, `root_cause`, `fix_or_next_probe`, `verification_runs`
 - `result-analysis`: `comparison_table`, `confounders`, `decision`, `recommended_next_step`
 - `experiment-closeout`: `retention_decision`, `workspace_state`, `result_note_path`, `final_summary_seed`
@@ -174,3 +203,4 @@ continue_with: continue current workflow
 - Do not start a new workflow when the user is clearly continuing the current one.
 - Do not advance past `experiment-design` approval without explicit user approval.
 - Do not declare success after `experiment-closeout` unless `reproducibility-check` passes.
+- Do not start experiment-specific edits on a dirty `main` branch.

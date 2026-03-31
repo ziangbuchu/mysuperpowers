@@ -19,7 +19,7 @@
 - 一个问题对应一个 workflow，而不是一串松散对话
 - skill 可单独使用，也可自动挂接到 workflow
 - 设计、规划、执行、调试、分析、收尾、复现检查之间有统一状态协议
-- 最后有统一 summary，可作为实验结论和下一步建议的出口
+- 最后有统一 summary，可作为实验结论、下一步建议和 Git 收尾入口
 
 ## 最快上手
 
@@ -47,6 +47,7 @@ workflow summary
 - skill 可以单独使用，也可以自动挂接到 workflow
 - workflow 状态默认保存在当前项目的 `.superpowers/workflows/`
 - 每个阶段结束都会写阶段摘要，并给出下一阶段和继续口令
+- `workflow summary` 在结论支持保留代码时可以继续接管分支选择、commit 草案和确认提交
 - Claude 的 `commands/` 与 `SessionStart` hook 现在都支持 workflow-aware 入口
 - Codex 侧统一支持自然语言入口：
   - `请为这个问题选择合适的 superpowers skill`
@@ -170,6 +171,8 @@ continue current workflow
 workflow summary
 ```
 
+如果 workflow 已经明确应当保留代码，`workflow summary` 还会继续给出分支选择、详细 commit 草案和提交确认。
+
 ### 准备发到组里前再过一遍证据
 
 ```text
@@ -277,6 +280,11 @@ use reproducibility-check
    并生成：
    - `.superpowers/workflows/<workflow_id>/final-summary.md`
 
+   如果你选择 keep，后续再执行 `workflow summary` 时，系统可以直接接上 Git 收尾：
+   - 继续当前分支提交
+   - 新建分支后提交
+   - 只生成详细 commit 草案
+
 10. 如果你准备对外说“这个改动确实更好”，最后再说：
 
     ```text
@@ -364,6 +372,7 @@ use training-debugging
 ./tests/claude-code/run-skill-tests.sh
 ./tests/hooks/test-session-start.sh
 ./tests/workflow/test-workflow-contracts.sh
+./tests/workflow/test-workflow-summary-git-handoff.sh
 ```
 
 更多说明见 [docs/testing.md](/data/lf/code/mysuperpowers/docs/testing.md)。

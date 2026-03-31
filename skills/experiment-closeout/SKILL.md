@@ -55,6 +55,7 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
 5. If the user chooses `keep`:
    - leave the code in place
    - record that retention decision in the note
+   - the next `workflow summary` may reuse that decision to offer branch and commit handoff
    - use `reproducibility-check` before making a performance claim
 6. If the user chooses `discard`:
    - write the note first
