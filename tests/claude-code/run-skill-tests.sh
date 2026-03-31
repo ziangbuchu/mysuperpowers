@@ -52,6 +52,7 @@ while [[ $# -gt 0 ]]; do
             echo "Tests:"
             echo "  test-experiment-design.sh     Test experiment-design skill guidance"
             echo "  test-experiment-closeout.sh   Test experiment-closeout skill guidance"
+            echo "  test-scientific-visualization.sh Test scientific-visualization skill guidance"
             echo "  test-training-debugging.sh    Test training-debugging skill guidance"
             echo "  test-using-superpowers-workflow.sh  Test workflow router guidance"
             exit 0
@@ -68,6 +69,7 @@ done
 tests=(
     "test-experiment-design.sh"
     "test-experiment-closeout.sh"
+    "test-scientific-visualization.sh"
     "test-training-debugging.sh"
     "test-using-superpowers-workflow.sh"
 )

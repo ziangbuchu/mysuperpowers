@@ -40,6 +40,8 @@ workflow summary
 
 如果当前 workflow 已经明确应保留代码，而且记录了足够的 Git 元数据，这个 summary 还会继续询问分支策略、生成详细 commit 草案，并在你确认后提交。
 
+如果 `result-analysis` 已经保存结果图，`workflow summary` 还应先复用这些图，并简短说明每张图支持什么结论，再进入分支策略与提交流程。
+
 ## 现在是怎么续接上下文的
 
 workflow 状态保存在当前项目下：
@@ -60,6 +62,7 @@ workflow 状态保存在当前项目下：
 - `docs/experiments/specs/`
 - `docs/experiments/plans/`
 - `docs/experiments/results/`
+- `docs/experiments/results/assets/`
 
 这意味着：
 
@@ -113,6 +116,12 @@ use training-debugging
 
 ```text
 use result-analysis
+```
+
+如果你想把 ablation、seed、收敛曲线或代价对比画成图，也可以直接说：
+
+```text
+use scientific-visualization
 ```
 
 ### 实验结束，要做收尾

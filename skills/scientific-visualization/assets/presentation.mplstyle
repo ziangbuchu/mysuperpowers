@@ -1,0 +1,17 @@
+font.family: sans-serif
+font.sans-serif: Arial, Helvetica, DejaVu Sans
+font.size: 12
+axes.labelsize: 13
+axes.titlesize: 14
+axes.linewidth: 1.0
+axes.spines.top: False
+axes.spines.right: False
+xtick.labelsize: 11
+ytick.labelsize: 11
+legend.frameon: False
+legend.fontsize: 11
+lines.linewidth: 2.4
+lines.markersize: 7
+savefig.dpi: 300
+savefig.bbox: tight
+image.cmap: viridis

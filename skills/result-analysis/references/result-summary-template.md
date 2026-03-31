@@ -13,6 +13,12 @@
 - Metrics:
 - Selection rule:
 
+## Visual Evidence
+- Figure path:
+- Caption:
+- What this figure supports:
+- Limitation or caveat:
+
 ## Confounders
 - What changed besides the intended intervention?
 - Which results need reruns?

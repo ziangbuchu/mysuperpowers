@@ -8,6 +8,9 @@ Read `skills/_shared/workflow-protocol.md`, inspect `.superpowers/workflows/ACTI
 
 - produce a compact cumulative summary before taking any Git action
 - refresh `final-summary.md` if the workflow is closing or closed
+- reuse saved visual evidence from `workflow.json.artifacts.result_figures` when available
+- if saved figures exist, cite their paths and briefly explain what each figure supports
+- if no saved figures exist, say that the summary has no recorded visual evidence
 - determine whether the workflow is `git_ready` according to the shared protocol
 - if it is not `git_ready`, surface the blocker and stop after the summary
 - if it is `git_ready`, continue in the same flow by:

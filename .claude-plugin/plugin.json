@@ -1,6 +1,6 @@
 {
   "name": "superpowers",
-  "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, analysis, and reproducibility",
+  "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, visualization, analysis, and reproducibility",
   "version": "6.1.0",
   "author": {
     "name": "ziangbuchu"
@@ -8,5 +8,5 @@
   "homepage": "https://github.com/ziangbuchu/mysuperpowers",
   "repository": "https://github.com/ziangbuchu/mysuperpowers",
   "license": "MIT",
-  "keywords": ["skills", "deep-learning", "research", "experiments", "debugging", "reproducibility"]
+  "keywords": ["skills", "deep-learning", "research", "experiments", "visualization", "debugging", "reproducibility"]
 }

@@ -40,35 +40,38 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
    - result summary
    - artifacts
    - experiment start-state metadata
+   - saved result figures, if any
 2. Ask the user explicitly:
    - keep the code changes
    - discard the code changes
    - pause the decision
 3. Write or update the experiment note in `docs/experiments/results/YYYY-MM-DD-<topic>.md`.
-4. For negative or inconclusive outcomes, make sure the note includes:
+4. Reuse saved figures from `workflow.json.artifacts.result_figures` in the note and final summary instead of regenerating them unless new evidence appears.
+5. For negative or inconclusive outcomes, make sure the note includes:
    - hypothesis
    - exact intervention
    - baseline used
    - metrics and artifacts
    - why the result is considered failed, flat, or unreliable
    - `do not repeat unless ...`
-5. If the user chooses `keep`:
+6. If the user chooses `keep`:
    - leave the code in place
    - record that retention decision in the note
    - the next `workflow summary` may reuse that decision to offer branch and commit handoff
    - use `reproducibility-check` before making a performance claim
-6. If the user chooses `discard`:
+7. If the user chooses `discard`:
    - write the note first
+   - preserve result notes and saved figures
    - revert experiment changes to the recorded start state
    - if the experiment began from a clean tree, restore or reset to the start commit
    - if the experiment began from a dirty tree, restore only the experiment-touched files
    - verify the post-revert git state before moving on
-7. Report three things:
+8. Report three things:
    - whether code was kept or discarded
    - where the experiment note lives
    - what state the workspace is now in
-8. Update `workflow.json` with `retention_decision`, `workspace_state`, `result_note_path`, and `final_summary_seed`.
-9. Refresh `final-summary.md` using `../_shared/final-summary-template.md`.
+9. Update `workflow.json` with `retention_decision`, `workspace_state`, `result_note_path`, and `final_summary_seed`.
+10. Refresh `final-summary.md` using `../_shared/final-summary-template.md`.
 
 ## Exit State
 
@@ -81,6 +84,7 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
 ## Guardrails
 
 - Never delete failed-experiment evidence just because code is discarded.
+- Never delete saved figures that explain a failed or inconclusive experiment.
 - Never revert before the failed experiment is documented.
 - Never assume failed changes should be kept or discarded; ask.
 - Never use a destructive rollback if unrelated changes existed before the experiment started.

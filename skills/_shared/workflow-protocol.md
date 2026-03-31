@@ -24,6 +24,7 @@ Human-readable experiment outputs still belong in:
 - `docs/experiments/specs/`
 - `docs/experiments/plans/`
 - `docs/experiments/results/`
+- `docs/experiments/results/assets/`
 
 Create these directories on first use if they do not exist.
 
@@ -57,6 +58,11 @@ Minimum required keys:
 - `evidence`
 - `artifacts`
 - `pending`
+
+Recommended artifact keys:
+
+- `artifacts.result_figures`
+  - list of `{path, kind, caption, source}` entries written by `result-analysis`
 
 Optional top-level keys:
 
@@ -103,6 +109,7 @@ Every workflow-aware skill must do this before ending the turn:
 1. Update `workflow.json`.
 2. Write or refresh `stages/<stage>.md` using `stage-summary-template.md`.
 3. Write any formal stage artifact under `docs/experiments/...` when the stage requires it.
+   - result figures belong under `docs/experiments/results/assets/<workflow_id>/`
 4. Set `current_stage`, `next_stage`, `status`, `open_questions`, and `pending` explicitly.
 5. End with a short handoff that includes:
    - `workflow_id`
@@ -129,6 +136,8 @@ When the user asks for a workflow summary:
 - Read `workflow.json`, existing stage summaries, and any formal docs.
 - Produce a compact cumulative summary before any Git action.
 - If the workflow is closing or closed, refresh `final-summary.md`.
+- If `artifacts.result_figures` exists, cite the saved figures and briefly explain what each one supports.
+- If no visual evidence is recorded, say that the workflow summary is text-only because no saved figures were captured.
 - Determine `git_ready=true` only when all of these are true:
   - the workflow is not waiting on approval or missing input
   - the recorded outcome is keep-oriented, such as `retention_decision=keep`, a keep-oriented `decision`, or `claim_status=claimable`
@@ -180,6 +189,7 @@ Each stage must write these stage-specific facts into `workflow.json`:
   - `start_state` must capture `commit`, `branch_name`, `tree_clean`, and `branch_policy` before experiment-specific edits
 - `training-debugging`: `failure_signature`, `minimal_repro`, `probe_points`, `root_cause`, `fix_or_next_probe`, `verification_runs`
 - `result-analysis`: `comparison_table`, `confounders`, `decision`, `recommended_next_step`
+  - also keep `artifacts.result_figures` in sync with any saved visual evidence
 - `experiment-closeout`: `retention_decision`, `workspace_state`, `result_note_path`, `final_summary_seed`
 - `reproducibility-check`: `claim_status`, `missing_evidence`, `what_changed`, `what_stayed_fixed`, `supporting_runs`
 

@@ -12,6 +12,7 @@ These tests verify that Claude can load and describe the research-oriented Super
 
 - `test-experiment-design.sh`
 - `test-experiment-closeout.sh`
+- `test-scientific-visualization.sh`
 - `test-training-debugging.sh`
 - `test-using-superpowers-workflow.sh`
 

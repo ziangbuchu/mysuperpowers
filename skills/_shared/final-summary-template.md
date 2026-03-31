@@ -12,6 +12,7 @@
 
 ## Evidence And Artifacts
 - Main docs, runs, metrics, and outputs
+- Result figures, if any, and what each one supports
 
 ## Retention Decision
 - Keep code changes / discard code changes / undecided

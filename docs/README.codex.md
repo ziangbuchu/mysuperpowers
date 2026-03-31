@@ -64,6 +64,7 @@ Formal experiment docs are stored under:
 docs/experiments/specs/
 docs/experiments/plans/
 docs/experiments/results/
+docs/experiments/results/assets/
 ```
 
 ## Recommended Prompts
@@ -88,6 +89,8 @@ workflow summary
 ```
 
 When a workflow summary concludes that code should be kept and the workflow has enough Git metadata, the same flow may continue into branch choice, detailed commit drafting, and explicit commit confirmation.
+
+If `result-analysis` saved figures, `workflow summary` should reuse those paths and explain what the visuals support before moving into any branch choice.
 
 ### Jump directly to a stage
 

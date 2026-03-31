@@ -33,7 +33,9 @@
   },
   "open_questions": [],
   "evidence": {},
-  "artifacts": {},
+  "artifacts": {
+    "result_figures": []
+  },
   "git": {
     "branch_strategy": "unknown",
     "target_branch": "",

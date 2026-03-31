@@ -1,0 +1,3 @@
+The current result summary is too text-heavy.
+
+I have baseline, ablation, and 3-seed validation metrics plus wall-clock numbers. Turn them into a small set of figures and explain what the visuals actually support.

@@ -29,8 +29,11 @@ For a manual Codex smoke check, open a project that contains a `.superpowers/wor
 continue current workflow
 workflow status
 workflow summary
+use scientific-visualization
 ```
 
 The assistant should prefer the active workflow instead of asking you to paste the previous stage again.
 
 If the workflow already supports keeping the code and has recorded Git start-state metadata, `workflow summary` should summarize first, then offer branch-aware Git handoff and a detailed commit draft.
+
+If `result-analysis` has comparable metrics, it should also be able to save result figures under `docs/experiments/results/assets/<workflow_id>/` and record them in `workflow.json.artifacts.result_figures`.

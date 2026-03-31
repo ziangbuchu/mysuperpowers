@@ -66,6 +66,10 @@ Use process skills before doing work:
 7. `experiment-closeout` when a run has ended and you must decide whether to keep or revert the code changes
 8. `reproducibility-check` before claiming an improvement or handing results to others
 
+Support skill:
+
+- `scientific-visualization` when result-analysis or workflow summary needs figures instead of text-only explanation
+
 When choosing a stage for a new problem, start from the earliest valid stage instead of jumping ahead.
 
 - `paper-to-implementation` for papers or reproduction requests

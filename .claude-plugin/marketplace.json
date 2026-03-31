@@ -1,13 +1,13 @@
 {
   "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers deep learning research skills",
+  "description": "Development marketplace for Superpowers deep learning research and visualization skills",
   "owner": {
     "name": "ziangbuchu"
   },
   "plugins": [
     {
       "name": "superpowers",
-      "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, analysis, and reproducibility",
+      "description": "Deep learning research workflow skills for Claude Code: experiment design, execution, debugging, visualization, analysis, and reproducibility",
       "version": "6.1.0",
       "source": "./",
       "author": {

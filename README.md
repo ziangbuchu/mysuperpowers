@@ -19,7 +19,7 @@
 - 一个问题对应一个 workflow，而不是一串松散对话
 - skill 可单独使用，也可自动挂接到 workflow
 - 设计、规划、执行、调试、分析、收尾、复现检查之间有统一状态协议
-- 最后有统一 summary，可作为实验结论、下一步建议和 Git 收尾入口
+- 最后有统一 summary，可作为实验结论、下一步建议、结果图入口和 Git 收尾入口
 
 ## 最快上手
 
@@ -92,6 +92,7 @@ workflow 状态写在“当前研究项目”里，而不是写在 superpowers s
 - `docs/experiments/specs/`
 - `docs/experiments/plans/`
 - `docs/experiments/results/`
+- `docs/experiments/results/assets/`
 
 这套状态协议定义在 [skills/_shared/workflow-protocol.md](/data/lf/code/mysuperpowers/skills/_shared/workflow-protocol.md)。
 
@@ -171,7 +172,7 @@ continue current workflow
 workflow summary
 ```
 
-如果 workflow 已经明确应当保留代码，`workflow summary` 还会继续给出分支选择、详细 commit 草案和提交确认。
+如果 workflow 已经明确应当保留代码，`workflow summary` 还会继续给出分支选择、详细 commit 草案和提交确认；如果 `result-analysis` 已经保存结果图，它也会优先复用这些视觉证据。
 
 ### 准备发到组里前再过一遍证据
 
@@ -264,6 +265,7 @@ use reproducibility-check
 
    它会进入 `result-analysis`，保守比较 baseline、ablation、rerun，判断结果真正支持什么，并写入：
    - `docs/experiments/results/2026-xx-xx-<topic>.md`
+   - `docs/experiments/results/assets/<workflow_id>/`
    - `.superpowers/workflows/<workflow_id>/stages/result-analysis.md`
 
 9. 然后继续：
@@ -358,6 +360,7 @@ use training-debugging
 
 - `skills/`: 研究阶段技能
 - `skills/_shared/`: workflow 协议、模板和状态示例
+- `skills/scientific-visualization/`: 结果图与视觉证据辅助 skill
 - `commands/`: Claude Code 的 workflow-aware 快捷入口
 - `hooks/`: 会话启动增强
 - `docs/`: 安装、使用与测试说明
