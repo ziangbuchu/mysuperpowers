@@ -25,6 +25,10 @@ Skills use Claude Code tool names. In Codex, read:
 
 - `references/codex-tools.md`
 
+In Copilot (VS Code), read:
+
+- `references/copilot-tools.md`
+
 ## First Router Decision
 
 Handle these workflow intents before choosing a new stage:

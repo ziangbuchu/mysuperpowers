@@ -54,6 +54,9 @@ workflow summary
   - `continue current workflow`
   - `workflow status`
   - `workflow summary`
+- Copilot (VS Code) 通过 `.github/skills/` 符号链接和 `.github/prompts/*.prompt.md` 提供同等支持：
+  - `/continue-workflow`, `/workflow-status`, `/workflow-summary` 等 slash prompt
+  - `copilot-instructions.md` 替代 SessionStart hook 注入 workflow 上下文
 
 ## Canonical Workflow
 

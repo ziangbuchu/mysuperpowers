@@ -1,5 +1,24 @@
 # Release Notes
 
+## 6.2.0
+
+Added GitHub Copilot (VS Code) support alongside existing Claude Code and Codex platforms.
+
+### Added
+
+- `.github/copilot-instructions.md` — session bootstrap replacing Claude's `SessionStart` hook
+- `.github/prompts/*.prompt.md` — 12 slash prompts mirroring `commands/` for Copilot Agent Chat
+- `.github/skills` symlink for Copilot skill auto-discovery
+- `.github/INSTALL.copilot.md` — installation guide for Copilot
+- `scripts/setup-copilot.sh` — one-command setup for research projects
+- `skills/using-superpowers/references/copilot-tools.md` — tool name mapping for VS Code
+- `docs/README.copilot.md` — usage guide for Copilot
+
+### Changed
+
+- `skills/using-superpowers/SKILL.md` — Platform Adaptation section now includes Copilot
+- `README.md` — core changes section now mentions Copilot support
+
 ## 6.1.0
 
 Workflow-oriented release focused on cross-skill handoff and active workflow continuation.
