@@ -125,14 +125,17 @@ AGENTS_SRC="$SUPERPOWERS_ROOT/AGENTS.md"
 AGENTS_DST="$TARGET/AGENTS.md"
 
 if [[ -f "$AGENTS_SRC" ]]; then
-    if [[ -e "$AGENTS_DST" ]]; then
+    if [[ -L "$AGENTS_DST" ]]; then
         echo ""
-        echo "AGENTS.md already exists in $TARGET — skipping."
-        echo "  If you want to update, manually compare and merge."
+        echo "AGENTS.md symlink already exists in $TARGET — skipping."
+    elif [[ -f "$AGENTS_DST" ]]; then
+        echo ""
+        echo "AGENTS.md (plain file) already exists in $TARGET"
+        echo "  To switch to a symlink (auto-updating): rm $AGENTS_DST && run this script again."
     else
-        cp "$AGENTS_SRC" "$AGENTS_DST"
+        ln -s "$AGENTS_SRC" "$AGENTS_DST"
         echo ""
-        echo "Copied AGENTS.md to $TARGET"
+        echo "Symlinked AGENTS.md in $TARGET -> $AGENTS_SRC"
     fi
 fi
 

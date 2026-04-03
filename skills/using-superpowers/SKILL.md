@@ -13,6 +13,11 @@ If there is even a small chance a research skill applies, load it before respond
 
 User instructions still win. Skills define how to work, not what the human wants.
 
+## Agent Behavior Rules
+
+If `AGENTS.md` exists in the project root, read it before responding to any research task.
+It defines methodology, quality gates, commit conventions, and communication style.
+
 ## Workflow Protocol
 
 Before responding, read `../_shared/workflow-protocol.md`.

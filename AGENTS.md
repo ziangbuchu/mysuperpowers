@@ -218,6 +218,12 @@ experiment-design → experiment-planning → experiment-execution
 - 仅当任务可自然拆为 2–4 个边界清晰、可独立验证且无同文件写冲突的子任务时，才适合并行。
 - 以下情况默认不适合并行：改动集中在核心训练文件、涉及共享 model / loss / eval 定义、根因未明的训练故障。
 
+### 子代理派发策略（如平台支持）
+
+- 子代理仅应承担代码实现、sanity check、单模块调试或局部配置分析等边界清晰的任务。
+- 不需要跨实验推理时才可使用子代理；跨阶段推理应由主代理负责。
+- 子代理派发后应明确等待结果，完成后及时关闭。
+
 ### Ownership / Blocked
 
 - 默认禁止两个子任务修改同一文件、同一 config 源、同一 shared model / loss / eval 定义。
