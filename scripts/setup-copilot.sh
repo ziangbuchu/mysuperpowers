@@ -119,6 +119,23 @@ BLOCK
     echo "Appended bootstrap block to $INSTRUCTIONS"
 fi
 
+# ── 4. AGENTS.md ──────────────────────────────────────────────────────────────
+
+AGENTS_SRC="$SUPERPOWERS_ROOT/AGENTS.md"
+AGENTS_DST="$TARGET/AGENTS.md"
+
+if [[ -f "$AGENTS_SRC" ]]; then
+    if [[ -e "$AGENTS_DST" ]]; then
+        echo ""
+        echo "AGENTS.md already exists in $TARGET — skipping."
+        echo "  If you want to update, manually compare and merge."
+    else
+        cp "$AGENTS_SRC" "$AGENTS_DST"
+        echo ""
+        echo "Copied AGENTS.md to $TARGET"
+    fi
+fi
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 
 echo ""

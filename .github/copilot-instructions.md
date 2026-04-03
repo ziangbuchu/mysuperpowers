@@ -8,10 +8,12 @@ Your available skills are listed at the top of your system prompt.
 At the start of every conversation that may involve a research task, experiment,
 model change, training failure, or paper reproduction:
 
-1. Load the `superpowers:using-superpowers` skill — it defines skill routing,
+1. Read `AGENTS.md` in the project root — it defines agent behavior rules,
+   research methodology, quality gates, and communication conventions.
+2. Load the `superpowers:using-superpowers` skill — it defines skill routing,
    workflow conventions, and the complete research stage order.
-2. Resolve the project root: run `git rev-parse --show-toplevel`, fallback to cwd.
-3. Check `<project_root>/.superpowers/workflows/ACTIVE`.
+3. Resolve the project root: run `git rev-parse --show-toplevel`, fallback to cwd.
+4. Check `<project_root>/.superpowers/workflows/ACTIVE`.
    - If it exists, read `<project_root>/.superpowers/workflows/<id>/workflow.json`.
    - Report the active workflow (id, status, current_stage, next_stage, problem)
      before your first substantive response.
