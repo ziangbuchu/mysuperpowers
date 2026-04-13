@@ -31,10 +31,11 @@ This stage writes:
    - whether the working tree is clean
    - branch policy: `new_branch`, `main`, or `current_branch`
    - expected files/configs to touch
-3. If the current branch is `main`, ask the user whether to:
+3. If the current branch is `main`, use the platform's explicit user-input mechanism to choose whether to:
    - create a new experiment branch (recommended)
    - stay on `main` only when the tree is clean
    - if `main` is dirty, stop and isolate the experiment on a new branch before editing
+   In Codex, use `ask_user` for this branch-policy decision.
 4. If the current branch is already not `main`, record `branch_policy=current_branch` unless the user explicitly requests a fresh branch.
 5. Implement the smallest required code or config change.
 6. Run cheap verification before expensive runs:
@@ -62,7 +63,7 @@ This stage writes:
 
 - `current_stage=experiment-execution`
 - `next_stage=result-analysis` unless the dominant issue is a training failure, in which case `next_stage=training-debugging`
-- `status=active` or `awaiting_input` when evidence is missing
+- `status=active` or `awaiting_input` when evidence is missing; when input is required, ask only for the exact missing evidence, and in Codex use `ask_user`
 - include the exact continue phrase `continue current workflow`
 
 ## Execution Rules
@@ -70,6 +71,7 @@ This stage writes:
 - Never mix unrelated improvements into an experiment branch.
 - Never start experiment-specific writes on a dirty `main` branch.
 - Record the branch policy before touching tracked files so `workflow summary` can reuse it later.
+- Do not bury the branch-policy choice in prose; in Codex, use `ask_user`.
 - If a sanity run fails, do not launch the full job.
 - If the first run is noisy or suspicious, rerun before interpreting.
 - If compute is limited, prioritize experiments that remove uncertainty fastest.

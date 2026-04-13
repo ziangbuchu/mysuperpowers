@@ -21,16 +21,20 @@ require_contains "skills/_shared/workflow-protocol.md" "draft commit only"
 require_contains "skills/_shared/workflow-protocol.md" 'For workflows that do not yet record `branch_policy`, ask again'
 require_contains "skills/_shared/workflow-protocol.md" "Chinese subject summary"
 require_contains "skills/_shared/workflow-protocol.md" '`背景`, `变更`, `验证`, `证据`'
+require_contains "skills/_shared/workflow-protocol.md" '`ask_user`'
 
 require_contains "commands/workflow-summary.md" 'clean `main`'
 require_contains "commands/workflow-summary.md" 'dirty `main`'
 require_contains "commands/workflow-summary.md" "asking for explicit confirmation before creating the commit"
+require_contains "commands/workflow-summary.md" '`ask_user`'
 
 require_contains "skills/using-superpowers/SKILL.md" "produce the cumulative summary without advancing stages"
 require_contains "skills/using-superpowers/SKILL.md" "Git handoff only when the workflow is Git-ready"
 
 require_contains "docs/README.codex.md" "branch choice"
+require_contains "docs/README.codex.md" '`ask_user`'
 require_contains "docs/README.codex.zh-CN.md" "分支策略"
+require_contains "docs/README.codex.zh-CN.md" '`ask_user`'
 require_contains "docs/testing.md" "branch-aware Git handoff"
 
 echo "=== workflow summary git handoff tests passed ==="

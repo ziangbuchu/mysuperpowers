@@ -54,6 +54,7 @@ workflow summary
   - `continue current workflow`
   - `workflow status`
   - `workflow summary`
+  - 需要用户确认、补充证据或选择分支时统一使用 `ask_user`
 - Copilot (VS Code) 通过 `.github/skills/` 符号链接和 `.github/prompts/*.prompt.md` 提供同等支持：
   - `/continue-workflow`, `/workflow-status`, `/workflow-summary` 等 slash prompt
   - `copilot-instructions.md` 替代 SessionStart hook 注入 workflow 上下文
@@ -176,6 +177,8 @@ workflow summary
 ```
 
 如果 workflow 已经明确应当保留代码，`workflow summary` 还会继续给出分支选择、详细 commit 草案和提交确认；如果 `result-analysis` 已经保存结果图，它也会优先复用这些视觉证据。
+
+在 Codex 里，这类阻塞式用户交互应统一通过 `ask_user` 发生，而不是混在普通说明文本里。
 
 ### 准备发到组里前再过一遍证据
 

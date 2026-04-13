@@ -41,7 +41,7 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
    - artifacts
    - experiment start-state metadata
    - saved result figures, if any
-2. Ask the user explicitly:
+2. Use the platform's explicit user-input mechanism for the retention decision. In Codex, use `ask_user` with:
    - keep the code changes
    - discard the code changes
    - pause the decision
@@ -86,5 +86,5 @@ If the tree was already dirty, isolate the experiment on a branch or record the 
 - Never delete failed-experiment evidence just because code is discarded.
 - Never delete saved figures that explain a failed or inconclusive experiment.
 - Never revert before the failed experiment is documented.
-- Never assume failed changes should be kept or discarded; ask.
+- Never assume failed changes should be kept or discarded; ask via the platform's explicit user-input mechanism. In Codex, use `ask_user`.
 - Never use a destructive rollback if unrelated changes existed before the experiment started.

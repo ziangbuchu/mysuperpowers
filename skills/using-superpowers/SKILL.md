@@ -48,9 +48,9 @@ For those requests:
 
 1. Resolve the current project root.
 2. Inspect `.superpowers/workflows/ACTIVE`.
-3. If no active workflow exists, say so plainly and ask for the problem to solve.
+3. If no active workflow exists, say so plainly and ask for the problem to solve. When that reply is needed before continuing, use the platform's explicit user-input mechanism; in Codex, use `ask_user`.
 4. If an active workflow exists, load `workflow.json`, relevant stage summaries, and any referenced docs.
-5. If the user asked to continue and the workflow is waiting on approval or missing evidence, surface that instead of advancing.
+5. If the user asked to continue and the workflow is waiting on approval or missing evidence, surface that instead of advancing. Use the platform's explicit user-input mechanism to unblock it; in Codex, use `ask_user`.
 6. If the user asked to continue and the workflow has a valid `next_stage`, continue with that stage.
 7. If the user asked for `workflow status`, report the active state without advancing.
 8. If the user asked for `workflow summary`, produce the cumulative summary without advancing stages, and offer the protocol-defined Git handoff only when the workflow is Git-ready.

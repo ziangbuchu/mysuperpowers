@@ -17,6 +17,7 @@ This repository keeps lightweight workflow-oriented tests around skill discovery
 ./tests/hooks/test-session-start.sh
 ./tests/workflow/test-workflow-contracts.sh
 ./tests/workflow/test-workflow-summary-git-handoff.sh
+./tests/workflow/test-codex-ask-user-contracts.sh
 ```
 
 ## Codex Smoke Checks
@@ -33,6 +34,8 @@ use scientific-visualization
 ```
 
 The assistant should prefer the active workflow instead of asking you to paste the previous stage again.
+
+When the workflow is blocked on approval, missing evidence, branch choice, closeout retention, or commit confirmation, the Codex-facing instructions should route that interaction through `ask_user`.
 
 If the workflow already supports keeping the code and has recorded Git start-state metadata, `workflow summary` should summarize first, then offer branch-aware Git handoff and a detailed commit draft.
 

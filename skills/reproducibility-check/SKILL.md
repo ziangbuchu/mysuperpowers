@@ -60,5 +60,5 @@ State:
 
 - `current_stage=reproducibility-check`
 - `next_stage=none`
-- `status=done` when claim evidence is sufficient, otherwise `status=awaiting_input`
+- `status=done` when claim evidence is sufficient, otherwise `status=awaiting_input`; when evidence is missing, ask only for the exact missing artifact or metadata, and in Codex use `ask_user`
 - include the exact continue phrase `continue current workflow`

@@ -14,7 +14,7 @@ Before stage-specific planning:
 1. Read `../_shared/workflow-protocol.md`.
 2. Resolve or create the active workflow in the current project root.
 3. Read `workflow.json`, the current spec, prior stage summaries, and any referenced artifacts.
-4. If design approval is still pending, stop and surface that approval gate instead of planning.
+4. If design approval is still pending, stop and surface that approval gate instead of planning. In Codex, re-issue the approval request with `ask_user`.
 
 This stage writes:
 

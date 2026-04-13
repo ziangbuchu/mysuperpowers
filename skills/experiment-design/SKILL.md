@@ -35,14 +35,14 @@ Do not change code, configs, or launch runs until these are clear:
 ## Workflow
 
 1. Inspect the current baseline: code path, configs, last known results, open uncertainties.
-2. Ask clarifying questions one at a time.
+2. If clarification is still needed, use the platform's explicit user-input mechanism. In Codex, use `ask_user`, and keep it to one question at a time.
 3. State the hypothesis in one sentence: "If we change X, metric Y should improve because Z."
 4. Propose 2-3 approaches and recommend one.
 5. Define the first experiment as the smallest test that could disprove the idea.
 6. Write an experiment card to `docs/experiments/specs/YYYY-MM-DD-<topic>.md`.
 7. Update `workflow.json` with `hypothesis`, `baseline`, `metric`, `dataset_split`, `budget`, `first_falsifier`, and `approval_required=true`.
 8. Write the stage summary using `../_shared/stage-summary-template.md`.
-9. Stop for explicit user approval before moving to `experiment-planning`.
+9. Stop for explicit user approval before moving to `experiment-planning`. In Codex, request that approval with `ask_user`.
 
 ## Exit State
 

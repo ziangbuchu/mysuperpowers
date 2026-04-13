@@ -92,6 +92,20 @@ When a workflow summary concludes that code should be kept and the workflow has 
 
 If `result-analysis` saved figures, `workflow summary` should reuse those paths and explain what the visuals support before moving into any branch choice.
 
+## User Interaction In Codex
+
+When a workflow needs a blocking human decision in Codex, use `ask_user` instead of burying the question inside a normal prose reply.
+
+This applies to:
+
+- design approval before `experiment-planning`
+- missing evidence when the workflow is `awaiting_input`
+- branch choice when execution starts on `main` or when `branch_policy` is missing
+- keep or discard decisions in `experiment-closeout`
+- final commit confirmation in `workflow summary`
+
+Each `ask_user` call should stay narrow: one blocking decision or one missing artifact request at a time.
+
 ### Jump directly to a stage
 
 ```text
@@ -132,3 +146,4 @@ Restart Codex after updating skills.
 2. Confirm the matching `workflow.json` exists
 3. Ask `workflow status` before asking to continue
 4. If `workflow summary` does not offer Git handoff, check whether the workflow is still awaiting input, approval, or missing execution start-state metadata
+5. If a workflow is blocked on approval or missing evidence, make sure Codex uses `ask_user` for that interaction instead of a plain question in prose

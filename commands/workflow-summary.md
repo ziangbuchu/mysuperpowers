@@ -15,7 +15,7 @@ Read `skills/_shared/workflow-protocol.md`, inspect `.superpowers/workflows/ACTI
 - if it is not `git_ready`, surface the blocker and stop after the summary
 - if it is `git_ready`, continue in the same flow by:
   - inspecting the current branch and working tree
-  - offering the protocol-defined branch choices for non-`main`, clean `main`, or dirty `main`
+  - offering the protocol-defined branch choices for non-`main`, clean `main`, or dirty `main`; in Codex use `ask_user`
   - drafting a detailed Conventional Commit message with `背景`, `变更`, `验证`, and `证据`
   - staging only the intended experiment changes
-  - asking for explicit confirmation before creating the commit
+  - asking for explicit confirmation before creating the commit; in Codex use `ask_user`

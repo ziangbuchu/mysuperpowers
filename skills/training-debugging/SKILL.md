@@ -59,7 +59,7 @@ Read `references/failure-patterns.md` when you need concrete probes.
 ## Exit State
 
 - `current_stage=training-debugging`
-- `status=active` or `awaiting_input` when key evidence is missing
+- `status=active` or `awaiting_input` when key evidence is missing; when input is required, request only the missing logs, configs, or run metadata, and in Codex use `ask_user`
 - include the exact continue phrase `continue current workflow`
 
 ## Red Flags

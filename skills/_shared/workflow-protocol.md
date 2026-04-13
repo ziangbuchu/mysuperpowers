@@ -102,6 +102,26 @@ Every workflow-aware skill must do this before stage-specific work:
 6. Read the existing `workflow.json` plus any relevant docs referenced under `docs`.
 7. Ask only for information that cannot be recovered from the project or workflow state.
 
+## Human Input And Approval
+
+Use workflow state first, then ask only when progress is blocked by information or a decision that cannot be recovered from the repository or prior workflow artifacts.
+
+When the platform supports an explicit user-input mechanism, use it instead of burying the question inside prose. In Codex, this means `ask_user`.
+
+Use `ask_user` in Codex for:
+
+- design approval before `experiment-planning`
+- missing evidence when `status=awaiting_input`
+- branch-policy choice on `main` or when `branch_policy` is missing
+- keep or discard decisions in `experiment-closeout`
+- final commit confirmation in `workflow summary`
+
+Keep the interaction narrow:
+
+- one blocking decision or one missing evidence request at a time
+- offer concrete choices when they are already known
+- wait for the answer before advancing the workflow
+
 ## Exit Contract
 
 Every workflow-aware skill must do this before ending the turn:
@@ -122,10 +142,10 @@ Every workflow-aware skill must do this before ending the turn:
 
 When the user asks to continue:
 
-- If `status=awaiting_approval`, surface the pending approval instead of advancing.
-- If `status=awaiting_input`, surface the missing input or evidence instead of advancing.
+- If `status=awaiting_approval`, surface the pending approval and request it again with the platform's explicit user-input mechanism. In Codex, use `ask_user`.
+- If `status=awaiting_input`, surface the missing input or evidence and request only that missing item with the platform's explicit user-input mechanism. In Codex, use `ask_user`.
 - If `next_stage` exists, continue with that stage.
-- If there is no active workflow, say so plainly and ask for the problem to solve.
+- If there is no active workflow, say so plainly and ask for the problem to solve. When that reply is needed before continuing, use the platform's explicit user-input mechanism. In Codex, use `ask_user`.
 
 When the user asks for workflow status:
 
@@ -148,8 +168,8 @@ When the user asks for a workflow summary:
   - on a non-`main` branch: `continue current branch and commit` (recommended), `create a new branch and commit`, or `draft commit only`
   - on a clean `main` branch: `create a new branch and commit` (recommended), `continue on main and commit`, or `draft commit only`
   - on a dirty `main` branch: `create a new branch and commit` or `draft commit only`
-- For workflows that do not yet record `branch_policy`, ask again instead of assuming that `main` is safe.
-- Never create a commit without explicit user confirmation.
+- For workflows that do not yet record `branch_policy`, ask again with the platform's explicit user-input mechanism instead of assuming that `main` is safe. In Codex, use `ask_user`.
+- Never create a commit without explicit user confirmation. In Codex, collect that confirmation with `ask_user`.
 - When the user chooses to commit from the summary flow:
   - inspect the current git branch and working tree
   - stage only the intended experiment changes

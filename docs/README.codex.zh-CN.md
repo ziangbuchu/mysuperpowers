@@ -42,6 +42,20 @@ workflow summary
 
 如果 `result-analysis` 已经保存结果图，`workflow summary` 还应先复用这些图，并简短说明每张图支持什么结论，再进入分支策略与提交流程。
 
+## Codex 里的用户交互
+
+当 workflow 需要一个会阻塞流程的人工决策时，在 Codex 里不要只写普通提问文本，统一使用 `ask_user`。
+
+主要包括：
+
+- `experiment-planning` 之前的设计确认
+- `status=awaiting_input` 时补缺失证据
+- execution 从 `main` 开始或 `branch_policy` 缺失时的分支选择
+- `experiment-closeout` 里的保留 / 丢弃 / 暂停决定
+- `workflow summary` 里的最终 commit 确认
+
+每次 `ask_user` 只问一个阻塞点，或者只补一个缺失工件，不要把多个决定混在一起。
+
 ## 现在是怎么续接上下文的
 
 workflow 状态保存在当前项目下：
@@ -155,6 +169,7 @@ use reproducibility-check
 - 如果只想知道现在做到哪，优先说 `workflow status`。
 - 如果只想拿当前结论，优先说 `workflow summary`。
 - 如果 `workflow summary` 没有继续给 Git 选项，优先检查是不是还在等待 approval/input，或 execution 没有记录完整的 start-state。
+- 如果 workflow 卡在 approval/input，优先确认 Codex 是不是用了 `ask_user` 去收这一步，而不是只在正文里口头追问。
 - 如果任务涉及模型、loss、数据、训练、评估、实验结论，默认应该先走 skill，而不是直接改代码。
 
 ## 更新
