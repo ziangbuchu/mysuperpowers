@@ -106,6 +106,8 @@ This applies to:
 
 Each `ask_user` call should stay narrow: one blocking decision or one missing artifact request at a time.
 
+It should trigger only when the workflow is blocked on a real human decision or missing evidence. If the needed context can already be recovered from the repository, `workflow.json`, or saved stage artifacts, do not use `ask_user`.
+
 ### Jump directly to a stage
 
 ```text

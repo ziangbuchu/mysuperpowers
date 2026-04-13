@@ -59,6 +59,18 @@ workflow summary
   - `/continue-workflow`, `/workflow-status`, `/workflow-summary` 等 slash prompt
   - `copilot-instructions.md` 替代 SessionStart hook 注入 workflow 上下文
 
+## Codex 里的 ask_user
+
+`ask_user` 只在 workflow 被卡住、必须拿到一个明确用户输入才能继续时触发，主要包括：
+
+- `experiment-design` 结束后，要不要批准进入 `experiment-planning`
+- workflow 处于 `awaiting_input` 或 `awaiting_approval`，需要补日志、artifact、config 或其他缺失证据
+- `experiment-execution` 准备在 `main` 上开始，或 `branch_policy` 缺失，需要先选分支策略
+- `experiment-closeout` 需要在 `keep`、`discard`、`pause` 之间做保留决策
+- `workflow summary` 需要做分支选择，或最终 commit 前要做明确确认
+
+反过来，已经能从仓库、`workflow.json` 或现有阶段工件里恢复的信息，不应该触发 `ask_user`。
+
 ## Canonical Workflow
 
 ```mermaid
